@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
+        <file>qml/MenuPage.qml</file>
+        <file>qml/NormalisasiDialog.qml</file>
+        <file>qml/RecentFileList.qml</file>
+        <file>qml/welcomePage.qml</file>
+        <file>qml/mainWindow.qml</file>
+        <file>qml/ColumnList.qml</file>
+        <file>images/trash.png</file>
+        <file>qml/rfDialog.qml</file>
+    </qresource>
+    <qresource prefix="/image">
+        <file>images/folder.png</file>
+    </qresource>
+</RCC>
