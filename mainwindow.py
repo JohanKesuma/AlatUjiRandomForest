@@ -9,6 +9,8 @@ from columnmodel import ColumnModel
 from dialogs.normalisasidialog import NormalisasiDialog
 from dialogs.rfDialog import RFDialog
 
+from randomforest import runRandomForest
+
 import resource
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -67,5 +69,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def onRandomForestButton(self):
-        dialog = RFDialog(self.tableModel.dataset, self)
-        dialog.exec()
+        runRandomForest(self.tableModel.dataset)
+        # dialog = RFDialog(self.tableModel.dataset, self)
+        
