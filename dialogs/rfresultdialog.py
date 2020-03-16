@@ -9,17 +9,22 @@ class RFResultDIalog(QDialog):
 
     resultModelInited = QtCore.pyqtSignal()
 
-    def __init__(self, resultModel, parent=None, flags=Qt.WindowFlags()):
+    def __init__(self, resultModels, parent=None, flags=Qt.WindowFlags()):
         super().__init__(parent=parent, flags=flags)
 
         # TODO init ui
         self.ui = Ui_RFResultDialog()
         self.ui.setupUi(self)
+        self.resultModels = resultModels
 
-        self.resultModel = resultModel
-        self.ui.quickWidget.rootContext().setContextProperty('resultModel', self.resultModel)
+        # self.resultModel = resultModel
+        self.ui.quickWidget.rootContext().setContextProperty('resultModel', self.resultModels)
         self.ui.quickWidget.rootContext().setContextProperty('RootDialog', self)
         self.ui.quickWidget.setSource(QtCore.QUrl("qrc:/qml/rfResultDialog.qml"))
         self.resultModelInited.emit()
+
+    @QtCore.pyqtSlot(result=list)
+    def resultModels(self):
+        return self.resultModels
 
     

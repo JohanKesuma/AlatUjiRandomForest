@@ -16,13 +16,15 @@ RowLayout {
             height: parent.height
             anchors.centerIn: parent
             implicitWidth: 200
+            model: resultModel
 
-            Connections {
-                target: RootDialog
-                onResultModelInited: {
-                    resultListView.model = resultModel
-                }
-            }
+            // Connections {
+            //     target: RootDialog
+            //     onResultModelInited: {
+            //         var resultModels = RootDialog.resultModels()
+            //         resultListView.model = resultModels[0]
+            //     }
+            // }
 
             delegate: Rectangle {
                 implicitHeight: 50

@@ -23,25 +23,30 @@ def runRandomForest(dataset: pd.DataFrame):
 
     # attr_train, attr_test, label_train, label_test = train_test_split(attr, label, test_size=0.3)
 
+    n_cross_val = [3, 5, 7, 9] # varasi cross validation yang dilakukan
+
     baseJumlahPohon = 10
-    data = []
-    for i in range(5):
-        jumlahPohon = baseJumlahPohon * (i + 1)
+    resultModels = []
+    for n in n_cross_val:
+        data = []
+        for i in range(5):
+            jumlahPohon = baseJumlahPohon * (i + 1)
 
-        rf = RandomForestClassifier(n_estimators=jumlahPohon, bootstrap=True)
-        score = cross_val_score(rf, attr, label, cv = 5)
-        print(score)
+            rf = RandomForestClassifier(n_estimators=jumlahPohon, bootstrap=True)
+            score = cross_val_score(rf, attr, label, cv = n)
 
-        # hitung akurasi (rata - rata)
-        akurasi = 0
-        for i in score:
-            akurasi = akurasi + i
-        akurasi = akurasi / len(score)
-        data_i = {
-            'jumlah_pohon': jumlahPohon,
-            'akurasi': akurasi
-        }
-        data.append(data_i)
+            # hitung akurasi (rata - rata)
+            akurasi = 0
+            for i in score:
+                akurasi = akurasi + i
+            akurasi = akurasi / len(score)
+            data_i = {
+                'jumlah_pohon': jumlahPohon,
+                'akurasi': akurasi
+            }
+            data.append(data_i)
+        resultModel = ResultModel(data)
+        resultModels.append(resultModel)
     # rf.fit(attr_train, label_train)
 
     # predict = rf.predict(attr_test)
@@ -50,8 +55,8 @@ def runRandomForest(dataset: pd.DataFrame):
     # akurasi = metrics.accuracy_score(label_test, predict)
     # print('Akurasi : ', akurasi)
 
-    resultModel = ResultModel(data)
+    # resultModel = ResultModel(data)
 
-    dialog = RFResultDIalog(resultModel)
+    dialog = RFResultDIalog(resultModels)
     dialog.exec()
 

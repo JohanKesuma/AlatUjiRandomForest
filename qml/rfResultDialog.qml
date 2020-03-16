@@ -2,6 +2,8 @@ import QtQuick 2.0
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
+import RFModel 1.0
+
 ColumnLayout {
     id: columnLayout
 
@@ -22,11 +24,11 @@ ColumnLayout {
             }
             TabButton {
                 text: qsTr("7 Fold")
-                onClicked: console.log('7 fold clicked')
+                onClicked: swipeView.currentIndex = 2
             }
             TabButton {
                 text: qsTr("9 Fold")
-                onClicked: console.log('9 fold clicked')
+                onClicked: swipeView.currentIndex = 3
             }
         }
     }
@@ -38,18 +40,37 @@ ColumnLayout {
         Layout.fillHeight: true
         Layout.fillWidth: true
         onCurrentIndexChanged: tabBar.currentIndex = currentIndex
+        property variant resultModels: RootDialog.resultModels()
 
         Page {
             id: firstPage
             RfResultPage {
                 anchors.fill: parent
+                property ResultModel resultModel: swipeView.resultModels[0]
             }
         }
 
         Page {
             id: secondPage
-            Text {
-                text: qsTr("T 2")
+            RfResultPage {
+                anchors.fill: parent
+                property ResultModel resultModel: swipeView.resultModels[1]
+            }
+        }
+
+        Page {
+            id: thirdPage
+            RfResultPage {
+                anchors.fill: parent
+                property ResultModel resultModel: swipeView.resultModels[2]
+            }
+        }
+
+        Page {
+            id: forthPage
+            RfResultPage {
+                anchors.fill: parent
+                property ResultModel resultModel: swipeView.resultModels[3]
             }
         }
 
