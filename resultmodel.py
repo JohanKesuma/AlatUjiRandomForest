@@ -11,7 +11,7 @@ class ResultModel(QAbstractListModel):
         print(model_data)
 
     def rowCount(self, parent=QModelIndex()):
-        return 5
+        return len(self.model)
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         row = index.row()

@@ -15,48 +15,104 @@ def runRandomForest(dataset: pd.DataFrame):
     attr = dataset.iloc[:,0:3] # ambil kolom atribut
     label = dataset.iloc[:,3] # ambil kolom target
 
-    # kf = KFold()
-    # kf.get_n_splits(attr)
-    # for train_index, test_index in kf.split(attr):
-    #     print("TRAIN:", train_index, "TEST:", test_index)
-    #     print(attr.ix[train_index])
+    n_folds = [3, 5, 7, 9]
+    n_pohon = [10, 20, 60, 100, 200, 400, 600]
 
-    # attr_train, attr_test, label_train, label_test = train_test_split(attr, label, test_size=0.3)
-
-    n_cross_val = [3, 5, 7, 9] # varasi cross validation yang dilakukan
-
-    baseJumlahPohon = 10
+    # hasil prediksi disimpan di dalam model
     resultModels = []
-    for n in n_cross_val:
-        data = []
-        for i in range(5):
-            jumlahPohon = baseJumlahPohon * (i + 1)
 
-            rf = RandomForestClassifier(n_estimators=jumlahPohon, bootstrap=True)
-            score = cross_val_score(rf, attr, label, cv = n)
+    for n in n_folds: # untuk setiap fold
+        result = [] # list untuk menyimpan hasil akurasi untuk masing - masing jumlah pohon
+        kf = KFold(n_splits=n)
+        for jumlah_pohon in n_pohon: # untuk setiap jumlah pohon
+            sum_akurasi = 0
+            for train_index, test_index in kf.split(attr):
+                # index training dan testing
+                print("TRAIN:", train_index, "TEST:", test_index)
 
-            # hitung akurasi (rata - rata)
-            akurasi = 0
-            for i in score:
-                akurasi = akurasi + i
-            akurasi = akurasi / len(score)
-            data_i = {
-                'jumlah_pohon': jumlahPohon,
-                'akurasi': akurasi
+                # ambil data training
+                x_train, y_train = attr.iloc[train_index,:], label.iloc[train_index]
+
+                #ambil data testing
+                x_test, y_test = attr.iloc[test_index,:], label.iloc[test_index]
+
+                # buat model random forest
+                rf = RandomForestClassifier(n_estimators=jumlah_pohon, bootstrap=True)
+                rf.fit(x_train, y_train)
+
+                # uji testing dengan model random forest
+                y_predict = rf.predict(x_test)
+
+                # evaluasi dengan confusion matrix
+                matrix = metrics.confusion_matrix(y_true=y_test, y_pred=y_predict)
+                print(matrix)
+
+                # hitung akurasi dari confusion matrix yang telah dibangun
+                akurasi = hitung_akurasi(matrix)
+                sum_akurasi += akurasi
+                print(akurasi)
+            # endfor
+            rata_akurasi = sum_akurasi / n
+            result_i = {
+                'jumlah_pohon': jumlah_pohon,
+                'akurasi': rata_akurasi
             }
-            data.append(data_i)
-        resultModel = ResultModel(data)
+
+            result.append(result_i)
+        # endfor
+        resultModel = ResultModel(result)
         resultModels.append(resultModel)
-    # rf.fit(attr_train, label_train)
-
-    # predict = rf.predict(attr_test)
-    # print(predict)
-
-    # akurasi = metrics.accuracy_score(label_test, predict)
-    # print('Akurasi : ', akurasi)
-
-    # resultModel = ResultModel(data)
+    # endfor
 
     dialog = RFResultDIalog(resultModels)
     dialog.exec()
 
+    # baseJumlahPohon = 10
+    # resultModels = []
+    # for n in n_cross_val:
+    #     data = []
+    #     for i in range(5):
+    #         jumlahPohon = baseJumlahPohon * (i + 1)
+
+    #         rf = RandomForestClassifier(n_estimators=jumlahPohon, bootstrap=True)
+    #         score = cross_val_score(rf, attr, label, cv = n)
+
+    #         # hitung akurasi (rata - rata)
+    #         akurasi = 0
+    #         for i in score:
+    #             akurasi = akurasi + i
+    #         akurasi = akurasi / len(score)
+    #         data_i = {
+    #             'jumlah_pohon': jumlahPohon,
+    #             'akurasi': akurasi
+    #         }
+    #         data.append(data_i)
+    #     resultModel = ResultModel(data)
+    #     resultModels.append(resultModel)
+    # # rf.fit(attr_train, label_train)
+
+    # # predict = rf.predict(attr_test)
+    # # print(predict)
+
+    # # akurasi = metrics.accuracy_score(label_test, predict)
+    # # print('Akurasi : ', akurasi)
+
+    # # resultModel = ResultModel(data)
+
+    # dialog = RFResultDIalog(resultModels)
+    # dialog.exec()
+
+def hitung_akurasi(confusion_matrix):
+    jumlah_data = 0
+    jumlah_benar = 0
+    panjang_matrix = len(confusion_matrix)
+    for i in range(panjang_matrix):
+        for j in range(panjang_matrix):
+            jumlah_data += confusion_matrix[i][j]
+            if i == j:
+                jumlah_benar += confusion_matrix[i][j]
+            # endif
+        # endfor
+    # endfor
+
+    return jumlah_benar / jumlah_data
