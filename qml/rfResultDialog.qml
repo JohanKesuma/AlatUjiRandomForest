@@ -41,6 +41,7 @@ ColumnLayout {
         Layout.fillWidth: true
         onCurrentIndexChanged: tabBar.currentIndex = currentIndex
         property variant resultModels: RootDialog.resultModels()
+        property variant nPohon: RootDialog.nPohon()
 
         Page {
             id: firstPage

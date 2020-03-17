@@ -68,32 +68,43 @@ RowLayout {
 
                 Component.onCompleted: {
 
-                    for (var i = 0; i < xValues.length; i++)
-                        console.log(xValues[i])
+                    // for (var i = 0; i < resultModel.length; i++)
+                    //     console.log(resultModel[i])
+                    
+                    var xValues = []
+                    var i = 0
+                    var data = resultModel.model
+                    data.forEach(element => {
+                        xValues[i] = element.akurasi
+                        i++
+                        console.log("akurasi ", element.akurasi)
+                    });
+                    console.log("xValues :", xValues);
+                    
+                    barSet.values = xValues
+                    // for(var key in data){
+                    //     var value = data[key]
+                    //     console.log(key, ": ", value)
+                    // }
 
-                    s.categories = xValues
-                    mySeries.axisX = s
-
-                }
-
-                BarCategoryAxis {
-                    id: s
-                    titleText: "Jumlah Pohon"
                 }
 
                 axisX: BarCategoryAxis {
                     titleText: "Jumlah Pohon"
-                    categories: xV
+                    categories: swipeView.nPohon
                 }
                 axisY: ValueAxis {
                     id: axisY
-                    min: 1
-                    max: 10
+                    min: 0
+                    max: 1
                     tickCount: 1
                     titleText: "Akurasi"
                 }
 
-                BarSet {values: [2, 2, 3, 4, 5, 6] }
+                BarSet {
+                    id: barSet
+                    values: [2, 2, 3, 4, 5, 6] 
+                }
             }
         }
     }

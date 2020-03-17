@@ -15,16 +15,22 @@ class RFResultDIalog(QDialog):
         # TODO init ui
         self.ui = Ui_RFResultDialog()
         self.ui.setupUi(self)
-        self.resultModels = resultModels
+        self._resultModels = resultModels
 
         # self.resultModel = resultModel
-        self.ui.quickWidget.rootContext().setContextProperty('resultModel', self.resultModels)
+        self.ui.quickWidget.rootContext().setContextProperty('resultModel', self._resultModels)
         self.ui.quickWidget.rootContext().setContextProperty('RootDialog', self)
         self.ui.quickWidget.setSource(QtCore.QUrl("qrc:/qml/rfResultDialog.qml"))
         self.resultModelInited.emit()
 
     @QtCore.pyqtSlot(result=list)
     def resultModels(self):
-        return self.resultModels
+        return self._resultModels
 
-    
+    @QtCore.pyqtSlot(result=list)
+    def nPohon(self):
+        n_pohon = []
+        for i in self._resultModels[0].model:
+            n_pohon.append(i['jumlah_pohon'])
+        
+        return n_pohon
