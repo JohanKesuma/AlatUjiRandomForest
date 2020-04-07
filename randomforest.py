@@ -11,64 +11,75 @@ import pandas as pd
 
 def runRandomForest(dataset: pd.DataFrame):
 
+    labels = ['BB/U', 'PB/U', 'BB/PB']
+    attrs = [['Js.L/P', 'Berat B.', 'Umur'], ['Js.L/P', 'Berat B.', 'PB / TB', 'Posisi diukur', 'Umur'], ['Js.L/P', 'Berat B.', 'PB / TB', 'Posisi diukur', 'Umur']]
+
     # pemisahan atribut dan target
-    attr = dataset.iloc[:,0:3] # ambil kolom atribut
-    label = dataset.iloc[:,3] # ambil kolom target
+    # attr = dataset[['Js.L/P', 'Berat B.', 'Umur']] # ambil kolom atribut
+    # label = dataset[['BB/U']] # ambil kolom target
 
     n_folds = [3, 5, 7, 9]
-    n_pohon = [10, 20, 60, 100, 200, 400, 600]
-    # n_pohon = [10, 20]
+    # n_pohon = [10, 20, 60, 100, 200, 400, 600]
+    n_pohon = [10, 20]
 
-    # hasil prediksi disimpan di dalam model
-    resultModels = []
+    models = [] # menyimpan hasil klasifikasi BB/U, PB/U, BB/PB
 
-    for n in n_folds: # untuk setiap fold
-        result = [] # list untuk menyimpan hasil akurasi untuk masing - masing jumlah pohon
-        kf = KFold(n_splits=n)
-        for jumlah_pohon in n_pohon: # untuk setiap jumlah pohon
-            sum_akurasi = 0
-            for train_index, test_index in kf.split(attr):
-                # index training dan testing
-                print("TRAIN:", train_index, "TEST:", test_index)
+    for attr_i, label_i in zip(attrs, labels):
+        # hasil prediksi disimpan di dalam model
+        resultModels = []
+        attr = dataset[attr_i]
+        label = dataset[label_i]
 
-                # ambil data training
-                x_train, y_train = attr.iloc[train_index,:], label.iloc[train_index]
 
-                #ambil data testing
-                x_test, y_test = attr.iloc[test_index,:], label.iloc[test_index]
+        for n in n_folds: # untuk setiap fold
+            result = [] # list untuk menyimpan hasil akurasi untuk masing - masing jumlah pohon
+            kf = KFold(n_splits=n)
+            for jumlah_pohon in n_pohon: # untuk setiap jumlah pohon
+                sum_akurasi = 0
+                for train_index, test_index in kf.split(attr):
+                    # index training dan testing
+                    print("TRAIN:", train_index, "TEST:", test_index)
 
-                # buat model random forest
-                rf = RandomForestClassifier(n_estimators=jumlah_pohon, bootstrap=True)
-                rf.fit(x_train, y_train)
+                    # ambil data training
+                    x_train, y_train = attr.iloc[train_index,:], label.iloc[train_index]
 
-                # uji data testing dengan model random forest
-                y_predict = rf.predict(x_test)
+                    #ambil data testing
+                    x_test, y_test = attr.iloc[test_index,:], label.iloc[test_index]
 
-                # evaluasi dengan confusion matrix
-                matrix = metrics.confusion_matrix(y_true=y_test, y_pred=y_predict)
-                print(matrix)
+                    # buat model random forest
+                    rf = RandomForestClassifier(n_estimators=jumlah_pohon, bootstrap=True, random_state=0)
+                    rf.fit(x_train, y_train)
 
-                # hitung akurasi dari confusion matrix yang telah dibangun
-                akurasi = hitung_akurasi(matrix)
-                sum_akurasi += akurasi
-                print(akurasi)
+                    # uji data testing dengan model random forest
+                    y_predict = rf.predict(x_test)
+
+                    # evaluasi dengan confusion matrix
+                    matrix = metrics.confusion_matrix(y_true=y_test, y_pred=y_predict)
+                    print(matrix)
+
+                    # hitung akurasi dari confusion matrix yang telah dibangun
+                    akurasi = _hitung_akurasi(matrix)
+                    sum_akurasi += akurasi
+                    print(akurasi)
+                # endfor
+                rata_akurasi = float(sum_akurasi / n)
+                result_i = {
+                    'jumlah_pohon': jumlah_pohon,
+                    'akurasi': rata_akurasi
+                }
+
+                result.append(result_i)
             # endfor
-            rata_akurasi = float(sum_akurasi / n)
-            result_i = {
-                'jumlah_pohon': jumlah_pohon,
-                'akurasi': rata_akurasi
-            }
-
-            result.append(result_i)
+            resultModel = ResultModel(result)
+            resultModels.append(resultModel)
         # endfor
-        resultModel = ResultModel(result)
-        resultModels.append(resultModel)
+        models.append(resultModels)
     # endfor
 
-    dialog = RFResultDIalog(resultModels)
+    dialog = RFResultDIalog(models)
     dialog.exec()
 
-def hitung_akurasi(confusion_matrix):
+def _hitung_akurasi(confusion_matrix):
     jumlah_data = 0
     jumlah_benar = 0
     panjang_matrix = len(confusion_matrix)

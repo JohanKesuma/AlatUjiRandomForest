@@ -31,5 +31,5 @@ class Ui_RFResultDialog(object):
 
     def retranslateUi(self, RFResultDialog):
         _translate = QtCore.QCoreApplication.translate
-        RFResultDialog.setWindowTitle(_translate("RFResultDialog", "Dialog"))
+        RFResultDialog.setWindowTitle(_translate("RFResultDialog", "Hasil Random Forest"))
 from PyQt5 import QtQuickWidgets

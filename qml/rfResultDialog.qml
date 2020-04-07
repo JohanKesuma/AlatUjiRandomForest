@@ -8,75 +8,322 @@ ColumnLayout {
     id: columnLayout
 
     Rectangle {
+        id: rectangle1
         Layout.fillWidth: true
-        implicitHeight: 40
+        implicitHeight: 30
+
         TabBar {
-            id: tabBar
-            anchors.fill: parent
-            TabButton {
-                text: qsTr("3 Fold")
-                onClicked: swipeView.currentIndex = 0
+            id: resultTabBar
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+
+            background: Rectangle {
+                color: "#eeeeee"
             }
 
             TabButton {
-                text: qsTr("5 Fold")
-                onClicked: swipeView.currentIndex = 1
+                id: bbuButton
+                text: qsTr("BB/U")
+                implicitWidth: 100
+                onClicked: resultSwipeView.setCurrentIndex(0)
             }
             TabButton {
-                text: qsTr("7 Fold")
-                onClicked: swipeView.currentIndex = 2
+                id: pbuButton
+                text: qsTr("PB/U")
+                implicitWidth: 100
+                onClicked: resultSwipeView.setCurrentIndex(1)
             }
             TabButton {
-                text: qsTr("9 Fold")
-                onClicked: swipeView.currentIndex = 3
+                id: bbpbButton
+                text: qsTr("BB/PB")
+                implicitWidth: 100
+                onClicked: resultSwipeView.setCurrentIndex(2)
             }
         }
     }
 
     SwipeView {
-        id: swipeView
-        width: 200
-        height: 200
+        id: resultSwipeView
         Layout.fillHeight: true
         Layout.fillWidth: true
-        onCurrentIndexChanged: tabBar.currentIndex = currentIndex
-        property variant resultModels: RootDialog.resultModels()
-        property variant nPohon: RootDialog.nPohon()
+        onCurrentIndexChanged: resultTabBar.setCurrentIndex(currentIndex)
 
+        // =============Page BB/U====================
         Page {
-            id: firstPage
-            RfResultPage {
+            id: bbuPage
+            ColumnLayout {
                 anchors.fill: parent
-                property ResultModel resultModel: swipeView.resultModels[0]
+                Rectangle {
+                    Layout.fillWidth: true
+                    implicitHeight: 40
+                    Text {
+                        text: "BB/U"
+                        font.pointSize: 20
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+
+                    }
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    implicitHeight: 40
+                    TabBar {
+                        id: bbuTabBar
+                        anchors.fill: parent
+                        TabButton {
+                            text: qsTr("3 Fold")
+                            onClicked: bbuSwipeView.currentIndex = 0
+                        }
+
+                        TabButton {
+                            text: qsTr("5 Fold")
+                            onClicked: bbuSwipeView.currentIndex = 1
+                        }
+                        TabButton {
+                            text: qsTr("7 Fold")
+                            onClicked: bbuSwipeView.currentIndex = 2
+                        }
+                        TabButton {
+                            text: qsTr("9 Fold")
+                            onClicked: bbuSwipeView.currentIndex = 3
+                        }
+                    }
+                }
+
+                SwipeView {
+                    id: bbuSwipeView
+                    width: 200
+                    height: 200
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    onCurrentIndexChanged: bbuTabBar.currentIndex = currentIndex
+                    property variant resultModels: RootDialog.resultModels[0]
+                    property variant nPohon: RootDialog.nPohon()
+
+                    Page {
+                        RfResultPage {
+                            anchors.fill: parent
+                            property ResultModel resultModel: bbuSwipeView.resultModels[0]
+                            property variant swipeView: bbuSwipeView
+                        }
+                    }
+
+                    Page {
+                        RfResultPage {
+                            anchors.fill: parent
+                            property ResultModel resultModel: bbuSwipeView.resultModels[1]
+                            property variant swipeView: bbuSwipeView
+                        }
+                    }
+
+                    Page {
+                        RfResultPage {
+                            anchors.fill: parent
+                            property ResultModel resultModel: bbuSwipeView.resultModels[2]
+                            property variant swipeView: bbuSwipeView
+                        }
+                    }
+
+                    Page {
+                        RfResultPage {
+                            anchors.fill: parent
+                            property ResultModel resultModel: bbuSwipeView.resultModels[3]
+                            property variant swipeView: bbuSwipeView
+                        }
+                    }
+
+                }
             }
         }
 
+        // =============Page PB/U====================
         Page {
-            id: secondPage
-            RfResultPage {
+            id: pbuPage
+            ColumnLayout {
                 anchors.fill: parent
-                property ResultModel resultModel: swipeView.resultModels[1]
+                Rectangle {
+                    Layout.fillWidth: true
+                    implicitHeight: 40
+                    Text {
+                        text: "PB/U"
+                        font.pointSize: 20
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+
+                    }
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    implicitHeight: 40
+                    TabBar {
+                        id: pbuTabBar
+                        anchors.fill: parent
+                        TabButton {
+                            text: qsTr("3 Fold")
+                            onClicked: pbuSwipeView.currentIndex = 0
+                        }
+
+                        TabButton {
+                            text: qsTr("5 Fold")
+                            onClicked: pbuSwipeView.currentIndex = 1
+                        }
+                        TabButton {
+                            text: qsTr("7 Fold")
+                            onClicked: pbuSwipeView.currentIndex = 2
+                        }
+                        TabButton {
+                            text: qsTr("9 Fold")
+                            onClicked: pbuSwipeView.currentIndex = 3
+                        }
+                    }
+                }
+
+                SwipeView {
+                    id: pbuSwipeView
+                    width: 200
+                    height: 200
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    onCurrentIndexChanged: pbuTabBar.currentIndex = currentIndex
+                    property variant resultModels: RootDialog.resultModels[1] // model PB/U
+                    property variant nPohon: RootDialog.nPohon()
+
+                    Page {
+                        RfResultPage {
+                            anchors.fill: parent
+                            property ResultModel resultModel: pbuSwipeView.resultModels[0]
+                            property variant swipeView: pbuSwipeView
+                        }
+                    }
+
+                    Page {
+                        RfResultPage {
+                            anchors.fill: parent
+                            property ResultModel resultModel: pbuSwipeView.resultModels[1]
+                            property variant swipeView: pbuSwipeView
+                        }
+                    }
+
+                    Page {
+                        RfResultPage {
+                            anchors.fill: parent
+                            property ResultModel resultModel: pbuSwipeView.resultModels[2]
+                            property variant swipeView: pbuSwipeView
+                        }
+                    }
+
+                    Page {
+                        RfResultPage {
+                            anchors.fill: parent
+                            property ResultModel resultModel: pbuSwipeView.resultModels[3]
+                            property variant swipeView: pbuSwipeView
+                        }
+                    }
+
+                }
             }
         }
 
+        // =============Page PB/U====================
         Page {
-            id: thirdPage
-            RfResultPage {
+            id: bbpbPage
+            ColumnLayout {
                 anchors.fill: parent
-                property ResultModel resultModel: swipeView.resultModels[2]
+                Rectangle {
+                    Layout.fillWidth: true
+                    implicitHeight: 40
+                    Text {
+                        text: "BB/PB"
+                        font.pointSize: 20
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+
+                    }
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    implicitHeight: 40
+                    TabBar {
+                        id: bbpbTabBar
+                        anchors.fill: parent
+                        TabButton {
+                            text: qsTr("3 Fold")
+                            onClicked: bbpbSwipeView.currentIndex = 0
+                        }
+
+                        TabButton {
+                            text: qsTr("5 Fold")
+                            onClicked: bbpbSwipeView.currentIndex = 1
+                        }
+                        TabButton {
+                            text: qsTr("7 Fold")
+                            onClicked: bbpbSwipeView.currentIndex = 2
+                        }
+                        TabButton {
+                            text: qsTr("9 Fold")
+                            onClicked: bbpbSwipeView.currentIndex = 3
+                        }
+                    }
+                }
+
+                SwipeView {
+                    id: bbpbSwipeView
+                    width: 200
+                    height: 200
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    onCurrentIndexChanged: bbpbTabBar.currentIndex = currentIndex
+                    property variant resultModels: RootDialog.resultModels[2] // model BB/PB
+                    property variant nPohon: RootDialog.nPohon()
+
+                    Page {
+                        RfResultPage {
+                            anchors.fill: parent
+                            property ResultModel resultModel: bbpbSwipeView.resultModels[0]
+                            property variant swipeView: bbpbSwipeView
+                        }
+                    }
+
+                    Page {
+                        RfResultPage {
+                            anchors.fill: parent
+                            property ResultModel resultModel: bbpbSwipeView.resultModels[1]
+                            property variant swipeView: bbpbSwipeView
+                        }
+                    }
+
+                    Page {
+                        RfResultPage {
+                            anchors.fill: parent
+                            property ResultModel resultModel: bbpbSwipeView.resultModels[2]
+                            property variant swipeView: bbpbSwipeView
+                        }
+                    }
+
+                    Page {
+                        RfResultPage {
+                            anchors.fill: parent
+                            property ResultModel resultModel: bbpbSwipeView.resultModels[3]
+                            property variant swipeView: bbpbSwipeView
+                        }
+                    }
+
+                }
             }
         }
-
-        Page {
-            id: forthPage
-            RfResultPage {
-                anchors.fill: parent
-                property ResultModel resultModel: swipeView.resultModels[3]
-            }
-        }
-
     }
 }
+
+    
 
 /*##^##
 Designer {
