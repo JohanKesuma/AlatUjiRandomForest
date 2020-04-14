@@ -11,6 +11,7 @@
         <file>qml/rfDialog.qml</file>
         <file>qml/rfResultDialog.qml</file>
         <file>qml/RfResultPage.qml</file>
+        <file>qml/ResultDetail.qml</file>
     </qresource>
     <qresource prefix="/image">
         <file>images/folder.png</file>

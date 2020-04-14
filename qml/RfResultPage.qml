@@ -18,25 +18,29 @@ RowLayout {
             implicitWidth: 200
             model: resultModel
 
-            // Connections {
-            //     target: RootDialog
-            //     onResultModelInited: {
-            //         var resultModels = RootDialog.resultModels()
-            //         resultListView.model = resultModels[0]
-            //     }
-            // }
-
             delegate: Rectangle {
                 implicitHeight: 50
                 width: parent.width
-                ColumnLayout {
-                    Text {
-                        text: model.jumlahPohon
+                RowLayout {
+                    width: parent.width
+                    ColumnLayout {
+                        Text {
+                            text: model.jumlahPohon
+                        }
+                        Text {
+                            text: model.akurasi
+                        }
                     }
-                    Text {
-                        text: model.akurasi
+
+                    Button {
+                        text: 'Detail'
+                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                        font.capitalization: Font.MixedCase
+                        flat: true
+                        onClicked: stack.push(resultDetail)
                     }
                 }
+                
 
                 ToolSeparator {
                     orientation: Qt.Horizontal
@@ -67,9 +71,6 @@ RowLayout {
                 property var xValues: ["2007", "2008", "2009", "2010", "2011", "2012" ]
 
                 Component.onCompleted: {
-
-                    // for (var i = 0; i < resultModel.length; i++)
-                    //     console.log(resultModel[i])
                     
                     var xValues = []
                     var i = 0
@@ -82,10 +83,6 @@ RowLayout {
                     console.log("xValues :", xValues);
                     
                     barSet.values = xValues
-                    // for(var key in data){
-                    //     var value = data[key]
-                    //     console.log(key, ": ", value)
-                    // }
 
                 }
 

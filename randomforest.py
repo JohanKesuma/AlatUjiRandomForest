@@ -2,12 +2,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 from sklearn.model_selection import KFold, cross_val_score
+from sklearn.tree import export_graphviz
 
 from dialogs.rfresultdialog import RFResultDIalog
 
 from resultmodel import ResultModel
 
 import pandas as pd
+
+import os
 
 def runRandomForest(dataset: pd.DataFrame):
 
@@ -23,6 +26,7 @@ def runRandomForest(dataset: pd.DataFrame):
     n_pohon = [10, 20]
 
     models = [] # menyimpan hasil klasifikasi BB/U, PB/U, BB/PB
+    tree_index = 0
 
     for attr_i, label_i in zip(attrs, labels):
         # hasil prediksi disimpan di dalam model
@@ -47,14 +51,26 @@ def runRandomForest(dataset: pd.DataFrame):
                     x_test, y_test = attr.iloc[test_index,:], label.iloc[test_index]
 
                     # buat model random forest
-                    rf = RandomForestClassifier(n_estimators=jumlah_pohon, bootstrap=True, random_state=0)
+                    rf = RandomForestClassifier(n_estimators=jumlah_pohon, bootstrap=True, random_state=0, criterion='entropy')
                     rf.fit(x_train, y_train)
+
+                    if tree_index < 1:
+                        export_graphviz(rf.estimators_[9],
+                        feature_names=attr.columns,
+                        filled=True,
+                        out_file='tree.dot',
+                        rounded=True)
+                        os.system('dot -Tpng tree.dot -o tree.png')
+
+                    tree_index += 1
+                    categories = label.astype('category').cat.categories
+                    
 
                     # uji data testing dengan model random forest
                     y_predict = rf.predict(x_test)
 
                     # evaluasi dengan confusion matrix
-                    matrix = metrics.confusion_matrix(y_true=y_test, y_pred=y_predict)
+                    matrix = metrics.confusion_matrix(y_true=y_test, y_pred=y_predict, labels=categories)
                     print(matrix)
 
                     # hitung akurasi dari confusion matrix yang telah dibangun
@@ -65,7 +81,8 @@ def runRandomForest(dataset: pd.DataFrame):
                 rata_akurasi = float(sum_akurasi / n)
                 result_i = {
                     'jumlah_pohon': jumlah_pohon,
-                    'akurasi': rata_akurasi
+                    'akurasi': rata_akurasi,
+
                 }
 
                 result.append(result_i)
