@@ -54,15 +54,15 @@ def runRandomForest(dataset: pd.DataFrame):
                     rf = RandomForestClassifier(n_estimators=jumlah_pohon, bootstrap=True, random_state=0, criterion='entropy')
                     rf.fit(x_train, y_train)
 
-                    if tree_index < 1:
-                        export_graphviz(rf.estimators_[9],
-                        feature_names=attr.columns,
-                        filled=True,
-                        out_file='tree.dot',
-                        rounded=True)
-                        os.system('dot -Tpng tree.dot -o tree.png')
+                    # if tree_index < 1:
+                    #     export_graphviz(rf.estimators_[9],
+                    #     feature_names=attr.columns,
+                    #     filled=True,
+                    #     out_file='tree.dot',
+                    #     rounded=True)
+                    #     os.system('dot -Tpng tree.dot -o tree.png')
 
-                    tree_index += 1
+                    # tree_index += 1
                     categories = label.astype('category').cat.categories
                     
 
@@ -82,7 +82,8 @@ def runRandomForest(dataset: pd.DataFrame):
                 result_i = {
                     'jumlah_pohon': jumlah_pohon,
                     'akurasi': rata_akurasi,
-
+                    'estimators': rf.estimators_,
+                    'attr': attr_i
                 }
 
                 result.append(result_i)

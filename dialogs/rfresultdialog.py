@@ -2,9 +2,12 @@ from PyQt5.QtWidgets import QDialog
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 from PyQt5.QtQml import qmlRegisterUncreatableType
+from sklearn.tree import export_graphviz
 
 from dialogs.ui_rfresultdialog import Ui_RFResultDialog
 
+import pathlib
+import os
 class RFResultDIalog(QDialog):
 
     resultModelInited = QtCore.pyqtSignal()
@@ -21,6 +24,8 @@ class RFResultDIalog(QDialog):
         # self.resultModel = resultModel
         self.ui.quickWidget.rootContext().setContextProperty('resultModel', self._resultModels)
         self.ui.quickWidget.rootContext().setContextProperty('RootDialog', self)
+        
+        self.ui.quickWidget.rootContext().setContextProperty('applicationPath', 'file://'+str(pathlib.Path().absolute())+'/')
         self.ui.quickWidget.setSource(QtCore.QUrl("qrc:/qml/rfResultDialog.qml"))
         self.resultModelInited.emit()
 
@@ -45,3 +50,13 @@ class RFResultDIalog(QDialog):
             n_pohon.append(i['jumlah_pohon'])
         
         return n_pohon
+
+    @QtCore.pyqtSlot(list, int, list)
+    def onTampilButton(self, estimators, index, attr):
+        print(attr)
+        export_graphviz(estimators[index],
+                    feature_names=attr,
+                    filled=True,
+                    out_file='tree.dot',
+                    rounded=True)
+        os.system('dot -Tpng tree.dot -o tree.png')

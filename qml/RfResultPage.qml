@@ -37,7 +37,9 @@ RowLayout {
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         font.capitalization: Font.MixedCase
                         flat: true
-                        onClicked: stack.push(resultDetail)
+                        onClicked: {
+                            stack.push(resultDetail, {estimators: model.estimators, attr: model.attr})
+                        }
                     }
                 }
                 
@@ -79,6 +81,7 @@ RowLayout {
                         xValues[i] = element.akurasi
                         i++
                         console.log("akurasi ", element.akurasi)
+                        
                     });
                     console.log("xValues :", xValues);
                     

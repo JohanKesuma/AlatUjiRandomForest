@@ -16,7 +16,9 @@ ColumnLayout {
     Component {
         id: resultDetail
         ResultDetail {
-
+            id: resultDetailPage
+            property variant estimators
+            property variant attr
         }
     }
 
