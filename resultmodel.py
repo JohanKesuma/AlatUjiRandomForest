@@ -6,6 +6,7 @@ class ResultModel(QAbstractListModel):
     Akurasi = Qt.UserRole + 2
     Estimators = Qt.UserRole + 3
     Attr = Qt.UserRole + 4
+    RfList = Qt.UserRole + 5
 
     def __init__(self, model_data = [], parent=None):
         super().__init__(parent=parent)
@@ -26,13 +27,16 @@ class ResultModel(QAbstractListModel):
             return self._model[row]['estimators']
         elif role == ResultModel.Attr:
             return self._model[row]['attr']
+        elif role == ResultModel.RfList:
+            return self._model[row]['rf_list']
 
     def roleNames(self):
         return {
             ResultModel.JumlahPohon: b'jumlahPohon',
             ResultModel.Akurasi: b'akurasi',
             ResultModel.Estimators: b'estimators',
-            ResultModel.Attr: b'attr'
+            ResultModel.Attr: b'attr',
+            ResultModel.RfList: b'rfList'
         }
 
     @pyqtProperty(list)

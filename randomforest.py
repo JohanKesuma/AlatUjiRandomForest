@@ -40,6 +40,9 @@ def runRandomForest(dataset: pd.DataFrame):
             kf = KFold(n_splits=n)
             for jumlah_pohon in n_pohon: # untuk setiap jumlah pohon
                 sum_akurasi = 0
+
+                # rfList = list dari model random forest, digunakan untuk uji data tunggal
+                rf_list = []
                 for train_index, test_index in kf.split(attr):
                     # index training dan testing
                     print("TRAIN:", train_index, "TEST:", test_index)
@@ -53,6 +56,7 @@ def runRandomForest(dataset: pd.DataFrame):
                     # buat model random forest
                     rf = RandomForestClassifier(n_estimators=jumlah_pohon, bootstrap=True, random_state=0, criterion='entropy')
                     rf.fit(x_train, y_train)
+                    rf_list.append(rf)
 
                     # if tree_index < 1:
                     #     export_graphviz(rf.estimators_[9],
@@ -69,6 +73,8 @@ def runRandomForest(dataset: pd.DataFrame):
                     # uji data testing dengan model random forest
                     y_predict = rf.predict(x_test)
 
+                    print('y_predict', y_predict)
+
                     # evaluasi dengan confusion matrix
                     matrix = metrics.confusion_matrix(y_true=y_test, y_pred=y_predict, labels=categories)
                     print(matrix)
@@ -83,7 +89,8 @@ def runRandomForest(dataset: pd.DataFrame):
                     'jumlah_pohon': jumlah_pohon,
                     'akurasi': rata_akurasi,
                     'estimators': rf.estimators_,
-                    'attr': attr_i
+                    'attr': attr_i,
+                    'rf_list': rf_list
                 }
 
                 result.append(result_i)
@@ -111,3 +118,14 @@ def _hitung_akurasi(confusion_matrix):
     # endfor
 
     return jumlah_benar / jumlah_data
+
+def uji_tunggal(classifier: list, attrValues: list):
+    predict_list = []
+    for c in classifier:
+        predict = c.predict(attrValues)
+        predict_list.append(predict)
+    # end for
+
+    # print(predict_list[0][0])
+
+    return predict_list

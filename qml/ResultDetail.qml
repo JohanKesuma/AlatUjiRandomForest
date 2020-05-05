@@ -7,7 +7,6 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
         RowLayout {
-            anchors.fill: parent
             ToolButton {
                 text: qsTr("‹")
                 onClicked: stack.pop()
@@ -16,7 +15,27 @@ ColumnLayout {
                 text: "Detail Klasifikasi"
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 elide: Label.ElideRight
-                Layout.fillWidth: true
+            }
+
+            ToolSeparator {
+                orientation: Qt.Vertical
+                height: parent.height
+                rightPadding: 5
+                leftPadding: 5
+                bottomPadding: 5
+                topPadding: 0
+                anchors.bottom: parent.bottom
+            }
+
+            ToolButton {
+                text: "Uji Data Tunggal"
+                wheelEnabled: true
+                autoExclusive: false
+                display: AbstractButton.TextBesideIcon
+                transformOrigin: Item.Center
+                Layout.fillWidth: false
+                font.capitalization: Font.MixedCase
+                onClicked: stack.push(ujiDataTunggalLayout, {'attrList': attr, 'rfList': rfList})
             }
         }
     }

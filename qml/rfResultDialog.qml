@@ -19,6 +19,14 @@ ColumnLayout {
             id: resultDetailPage
             property variant estimators
             property variant attr
+            property variant rfList
+        }
+    }
+
+    Component {
+        id: ujiDataTunggalLayout
+        UjiDataTunggalLayout {
+
         }
     }
 

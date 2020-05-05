@@ -6,6 +6,8 @@ from sklearn.tree import export_graphviz
 
 from dialogs.ui_rfresultdialog import Ui_RFResultDialog
 
+import randomforest
+
 import pathlib
 import os
 class RFResultDIalog(QDialog):
@@ -60,3 +62,12 @@ class RFResultDIalog(QDialog):
                     out_file='tree.dot',
                     rounded=True)
         os.system('dot -Tpng tree.dot -o tree.png')
+
+    @QtCore.pyqtSlot(list, list)
+    def onPrediksiButton(self, classifier, attrValues):
+        return randomforest.uji_tunggal(classifier, attrValues)
+
+    # @QtCore.pyqtSlot()
+    # def onPrediksiButton(self):
+    #     print('prediksi')
+    #     randomforest.uji_tunggal(None, None)
