@@ -42,3 +42,29 @@ class ResultModel(QAbstractListModel):
     @pyqtProperty(list)
     def model(self):
         return self._model
+
+class HasilPrediksiModel(QAbstractListModel):
+
+    PrediksiStr = Qt.UserRole + 1
+    Name = Qt.UserRole + 2
+
+    def __init__(self, model_data = [], parent=None):
+        super().__init__(parent=parent)
+        self._model = model_data
+
+    def rowCount(self, parent=QModelIndex()):
+        return len(self._model)
+
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
+        row = index.row()
+
+        if role == HasilPrediksiModel.PrediksiStr:
+            return self._model[row]
+        elif role == HasilPrediksiModel.Name:
+            return 'model {}'.format((row + 1))
+
+    def roleNames(self):
+        return {
+            HasilPrediksiModel.PrediksiStr: b'prediksiStr',
+            HasilPrediksiModel.Name: b'name'
+        }

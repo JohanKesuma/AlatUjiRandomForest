@@ -2,6 +2,8 @@ import QtQuick 2.0
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
+import RFModel 1.0
+
 ColumnLayout {
     property variant attrList: []
     property variant attrInput: []
@@ -26,46 +28,99 @@ ColumnLayout {
         Layout.fillHeight: true
         Layout.fillWidth: true
 
-        Frame {
+        RowLayout {
             anchors.centerIn: parent
-            ColumnLayout {
-                GridLayout {
-                    id: gridLayout
-                    columnSpacing: 20
-                    rowSpacing: 5
-                    columns: 2
-                    Component.onCompleted: {
-                        for (let i = 0; i < attrList.length; i++)  {
-                            const label = Qt.createComponent('AttrLabel.qml')
-                            label.createObject(gridLayout, {"labelText": attrList[i]})
-                            const inputField = Qt.createComponent('AttrInput.qml')
-                            const inptFieldObject = inputField.createObject(gridLayout)
-                            attrInput[i] = inptFieldObject
-                        }
-                    }
-                    
-                }
-
-                Button {
-                        text: 'Prediksi'
-                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                        onClicked: {
-                            let attrValues = []
+            Frame {
+                Layout.fillHeight: true
+                ColumnLayout {
+                    GridLayout {
+                        id: gridLayout
+                        columnSpacing: 20
+                        rowSpacing: 5
+                        columns: 2
+                        Component.onCompleted: {
                             for (let i = 0; i < attrList.length; i++)  {
-                                attrValues[i] = parseFloat(attrInput[i].text)
+                                const label = Qt.createComponent('AttrLabel.qml')
+                                label.createObject(gridLayout, {"labelText": attrList[i]})
+                                const inputField = Qt.createComponent('AttrInput.qml')
+                                const inptFieldObject = inputField.createObject(gridLayout)
+                                attrInput[i] = inptFieldObject
                             }
-                            attrValues = [attrValues]
-                            
+                        }
+                        
+                    }
 
-                            RootDialog.onPrediksiButton(rfList, attrValues)
+                    Button {
+                            text: 'Prediksi'
+                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                            onClicked: {
+                                let attrValues = []
+                                for (let i = 0; i < attrList.length; i++)  {
+                                    attrValues[i] = parseFloat(attrInput[i].text)
+                                }
+                                attrValues = [attrValues]
+                                
+
+                                const model = RootDialog.onPrediksiButton(rfList, attrValues)
+                                
+                                hasilPrediksiFrame.visible = true
+                                hasilPrediksiListView.model = model
+                                
+                            }
+                        }
+                }
+                
+            }
+
+            Frame {
+                id: hasilPrediksiFrame
+                visible: false
+                Layout.fillHeight: true
+                implicitWidth: 200
+
+                ColumnLayout {
+                    anchors.fill: parent
+                    Text {
+                        text: qsTr("Hasil Prediksi")
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        font.bold: true
+                    }
+
+                    ToolSeparator {
+                        orientation: Qt.Horizontal
+                        width: parent.width
+                        Layout.fillWidth: true
+                        bottomPadding: 5
+                        rightPadding: 3
+                        leftPadding: 3
+                        topPadding: 5
+                    }
+
+                    ListView {
+                        id: hasilPrediksiListView
+                        clip: true
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+
+                        delegate: Rectangle {
+                            implicitHeight: 30
+                            implicitWidth: 200
+                            RowLayout {
+                                spacing: 15
+                                Label {
+                                    text: model.name
+                                }
+                                Text {
+                                    text: model.prediksiStr
+                                }
+                            }
                         }
                     }
+                }
             }
-            
         }
-
-
-
     }
 }
 

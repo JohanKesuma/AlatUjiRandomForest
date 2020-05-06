@@ -6,7 +6,7 @@ from sklearn.tree import export_graphviz
 
 from dialogs.rfresultdialog import RFResultDIalog
 
-from resultmodel import ResultModel
+from resultmodel import ResultModel, HasilPrediksiModel
 
 import pandas as pd
 
@@ -23,7 +23,7 @@ def runRandomForest(dataset: pd.DataFrame):
 
     n_folds = [3, 5, 7, 9]
     # n_pohon = [10, 20, 60, 100, 200, 400, 600]
-    n_pohon = [10, 20]
+    n_pohon = [10]
 
     models = [] # menyimpan hasil klasifikasi BB/U, PB/U, BB/PB
     tree_index = 0
@@ -123,9 +123,11 @@ def uji_tunggal(classifier: list, attrValues: list):
     predict_list = []
     for c in classifier:
         predict = c.predict(attrValues)
-        predict_list.append(predict)
+        predict_list.append(predict[0])
     # end for
 
-    # print(predict_list[0][0])
+    print(predict_list)
 
-    return predict_list
+    hasilPrediksiModel = HasilPrediksiModel(predict_list)
+
+    return hasilPrediksiModel
