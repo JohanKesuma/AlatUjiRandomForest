@@ -5,8 +5,11 @@ from PyQt5.QtQml import qmlRegisterUncreatableType
 from sklearn.tree import export_graphviz
 
 from dialogs.ui_rfresultdialog import Ui_RFResultDialog
+from sklearn.preprocessing import MinMaxScaler
 
 from resultmodel import HasilPrediksiModel
+
+import pandas as pd
 
 import randomforest
 
@@ -17,13 +20,15 @@ class RFResultDIalog(QDialog):
     resultModelInited = QtCore.pyqtSignal()
     resultModelsChanged = QtCore.pyqtSignal()
 
-    def __init__(self, models, parent=None, flags=Qt.WindowFlags()):
+    def __init__(self, dataset, models, scaler = None, parent=None, flags=Qt.WindowFlags()):
         super().__init__(parent=parent, flags=flags)
 
         # TODO init ui
         self.ui = Ui_RFResultDialog()
         self.ui.setupUi(self)
         self._resultModels = models
+        self._scaler = scaler
+        self._dataset = dataset.iloc[:,0:5] # ambil feature-nya saja
 
         # self.resultModel = resultModel
         self.ui.quickWidget.rootContext().setContextProperty('resultModel', self._resultModels)
@@ -65,8 +70,25 @@ class RFResultDIalog(QDialog):
                     rounded=True)
         os.system('dot -Tpng tree.dot -o tree.png')
 
-    @QtCore.pyqtSlot(list, list, result=HasilPrediksiModel)
-    def onPrediksiButton(self, classifier, attrValues):
+    @QtCore.pyqtSlot(list, list, list, result=HasilPrediksiModel)
+    def onPrediksiButton(self, classifier, attrLabels, attrValues):
+        print(attrLabels)
+
+        # normalisasi jika dataset asli di normalisasi
+        if self._scaler != None:
+            # buat dataframe dengan isi 0 semua
+            df = pd.DataFrame(0, columns=self._dataset.columns, index=range(1))
+
+            # isi atribut yang dibutuhkan untuk klasifikasi
+            for i in range(len(attrLabels)):
+                df[[attrLabels[i]]] = attrValues[0][i]
+            
+            # normalisasi dataframe dan ambil atribut yang dibutuhkan
+            df = pd.DataFrame(self._scaler.transform(df), columns=df.columns, index=df.index)[attrLabels]
+            attrValues = df
+            # print(self._dataset)
+
+        print(attrValues)
         model = randomforest.uji_tunggal(classifier, attrValues)
         model.setParent(self)
         return model

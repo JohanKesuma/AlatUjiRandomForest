@@ -39,6 +39,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # columnQuickWidget
         self.ui.columnQuickWidget.rootContext().setContextProperty('MainWindow', self)
         self.ui.columnQuickWidget.setSource(QUrl('qrc:/qml/ColumnList.qml'))
+
+        self.scaler = None # pointer ke MinMaxScaler
     
     @pyqtSlot()
     def openDataset(self):
@@ -69,6 +71,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
     @pyqtSlot()
     def onRandomForestButton(self):
-        runRandomForest(self.tableModel.dataset)
+        runRandomForest(self.tableModel.dataset, self.scaler)
         # dialog = RFDialog(self.tableModel.dataset, self)
         

@@ -7,6 +7,7 @@ import RFModel 1.0
 ColumnLayout {
     property variant attrList: []
     property variant attrInput: []
+    property variant attrLabel: []
     property variant rfList
     ToolBar {
         Layout.fillWidth: true
@@ -41,10 +42,11 @@ ColumnLayout {
                         Component.onCompleted: {
                             for (let i = 0; i < attrList.length; i++)  {
                                 const label = Qt.createComponent('AttrLabel.qml')
-                                label.createObject(gridLayout, {"labelText": attrList[i]})
+                                const labelObject = label.createObject(gridLayout, {"labelText": attrList[i]})
                                 const inputField = Qt.createComponent('AttrInput.qml')
                                 const inptFieldObject = inputField.createObject(gridLayout)
                                 attrInput[i] = inptFieldObject
+                                attrLabel[i] = labelObject
                             }
                         }
                         
@@ -55,13 +57,16 @@ ColumnLayout {
                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                             onClicked: {
                                 let attrValues = []
+                                let attrLabels = []
                                 for (let i = 0; i < attrList.length; i++)  {
                                     attrValues[i] = parseFloat(attrInput[i].text)
+
+                                    attrLabels[i] = attrLabel[i].text
                                 }
                                 attrValues = [attrValues]
                                 
 
-                                const model = RootDialog.onPrediksiButton(rfList, attrValues)
+                                const model = RootDialog.onPrediksiButton(rfList, attrLabels, attrValues)
                                 
                                 hasilPrediksiFrame.visible = true
                                 hasilPrediksiListView.model = model

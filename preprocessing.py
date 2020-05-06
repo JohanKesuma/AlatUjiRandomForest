@@ -20,3 +20,5 @@ def minMaxNorm(min: int, max: int, dataset: pd.DataFrame):
 
     x = pd.DataFrame(result, columns=dataset.columns, index=dataset.index)
     dataset.update(x)
+
+    return scaler

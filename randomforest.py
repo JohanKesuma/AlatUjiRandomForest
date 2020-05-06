@@ -12,7 +12,7 @@ import pandas as pd
 
 import os
 
-def runRandomForest(dataset: pd.DataFrame):
+def runRandomForest(dataset: pd.DataFrame, scaler = None):
 
     labels = ['BB/U', 'PB/U', 'BB/PB']
     attrs = [['Js.L/P', 'Berat B.', 'Umur'], ['Js.L/P', 'Berat B.', 'PB / TB', 'Posisi diukur', 'Umur'], ['Js.L/P', 'Berat B.', 'PB / TB', 'Posisi diukur', 'Umur']]
@@ -101,7 +101,7 @@ def runRandomForest(dataset: pd.DataFrame):
         models.append(resultModels)
     # endfor
 
-    dialog = RFResultDIalog(models)
+    dialog = RFResultDIalog(dataset, models, scaler)
     dialog.exec()
 
 def _hitung_akurasi(confusion_matrix):
