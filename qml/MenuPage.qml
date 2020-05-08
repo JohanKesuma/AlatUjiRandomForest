@@ -19,6 +19,7 @@ Item {
             id: openDatasetButton
             text: qsTr("Open Dataset")
             flat: true
+            onClicked: MainWindow.openDataset()
         }
 
         ToolSeparator {
@@ -26,18 +27,10 @@ Item {
         }
 
         Button {
-            id: missingDataButton
-            text: qsTr("Missing Data")
-            flat: true
-            Material.background: Material.Blue
-            onClicked: console.log("missing data clicked")
-        }
-
-        Button {
             id: normalisasiButton
             text: qsTr("Normalisasi")
             flat: true
-            Material.background: Material.Blue
+            // Material.background: Material.Blue
             onClicked: MainWindow.onNormalisasiButton()
         }
 

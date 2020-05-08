@@ -6,63 +6,54 @@ import QtQuick.Layouts 1.12
 Rectangle {
 
     id: rectangle
-    anchors.fill: parent
 
-    Button {
-        id: openDatasetButton
-        flat: true
-        y: 17
-        width: 120
-        height: 50
-        text: qsTr("Open Dataset")
-        display: AbstractButton.TextOnly
-        anchors.left: parent.left
-        anchors.leftMargin: 40
-        onClicked: MainWindow.openDataset()
+    NumberAnimation on opacity {
+        from: 0
+        to: 1
+        duration: 200
+        running: true
     }
 
-    Label {
-        id: recentDatasetLabel
-        text: qsTr("Recent Dataset")
-        anchors.top: openDatasetButton.bottom
-        anchors.topMargin: 20
-        anchors.left: parent.left
-        anchors.leftMargin: 40
-        fontSizeMode: Text.FixedSize
-        renderType: Text.QtRendering
+    ColumnLayout {
+        anchors.centerIn: parent
+        spacing: 20
+        Text {
+            text: 'Klasifikasi Status Gizi Balita Menggunakan Metode Random Forest'
+            Layout.fillWidth: true
+        }
+
+        Button {
+            id: openDatasetButton
+            flat: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            text: qsTr("Open Dataset")
+            display: AbstractButton.TextOnly
+            onClicked: MainWindow.openDataset()
+        }   
     }
 
-    ListView {
-        id: listView
-        boundsBehavior: Flickable.StopAtBounds
-        visible: true
-        clip: false
-        anchors.top: recentDatasetLabel.bottom
-        anchors.topMargin: 15
-        anchors.left: parent.left
-        anchors.leftMargin: 40
-        implicitWidth: 200
-        implicitHeight: 50
-        spacing: 10
-        model: ListModel {
-            ListElement {
-                name: "Johan"
-                description: "Mahasiswa"
+    Popup {
+        id: popup
+        x: openDatasetButton.mapToGlobal(0,0).x
+        y: openDatasetButton.mapToGlobal(0,0).y
+        width: 200
+        height: 300
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+        Rectangle {
+            anchors.fill: parent
+            Text {
+                id: name
+                text: qsTr("Name")
+                anchors.centerIn: parent
             }
-            ListElement {
-                name: "Satria"
-                description: "Mahasiswa"
-            }
-        }
-//        delegate: Loader {
-//            source: "recentFileList.qml";
-//        }
-        delegate: RecentFileList {
-            id: recent
-        }
 
+        }
     }
 }
+
+
 
 
 /*##^##

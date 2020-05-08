@@ -37,8 +37,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.menuQuickWidget.rootContext().setContextProperty('MainWindow', self)
 
         # columnQuickWidget
-        self.ui.columnQuickWidget.rootContext().setContextProperty('MainWindow', self)
-        self.ui.columnQuickWidget.setSource(QUrl('qrc:/qml/ColumnList.qml'))
+        # self.ui.columnQuickWidget.rootContext().setContextProperty('MainWindow', self)
+        # self.ui.columnQuickWidget.setSource(QUrl('qrc:/qml/ColumnList.qml'))
 
         self.scaler = None # pointer ke MinMaxScaler
     
@@ -46,15 +46,20 @@ class MainWindow(QtWidgets.QMainWindow):
     def openDataset(self):
         file_name = QtWidgets.QFileDialog.getOpenFileName(self, 'Open Dataset', QDir.homePath(), "Excel files (*.xls *.xlsx)")
         
+        # jika cancel
+        if file_name[0] == '' or file_name == None: 
+            return
+        
         self.tableModel = TableModel.open_dataset(file_name[0])
 
-        self.columnModel = ColumnModel(self.tableModel.dataset)
-        self.ui.columnQuickWidget.rootContext().setContextProperty('columnModel', self.columnModel)
-        self.columnModelInited.emit()
+        # self.columnModel = ColumnModel(self.tableModel.dataset)
+        # self.ui.columnQuickWidget.rootContext().setContextProperty('columnModel', self.columnModel)
+        # self.columnModelInited.emit()
 
         if self.tableModel != None:
             self.ui.tableView.setModel(self.tableModel)
             self.ui.stackedWidget.setCurrentIndex(1)
+        
 
     @pyqtSlot()
     def onNormalisasiButton(self):

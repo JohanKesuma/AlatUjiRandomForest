@@ -63,7 +63,7 @@ class RFResultDIalog(QDialog):
     @QtCore.pyqtSlot(list, int, list)
     def onTampilButton(self, estimators, index, attr):
         print(attr)
-        export_graphviz(estimators[index],
+        export_graphviz(estimators[index - 1],
                     feature_names=attr,
                     filled=True,
                     out_file='tree.dot',

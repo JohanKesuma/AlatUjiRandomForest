@@ -164,6 +164,10 @@ ColumnLayout {
             id: estimatorIndexTextField
             height: 40
             width: 100
+            validator: IntValidator{
+                bottom: 1
+                top: estimators.length
+            }
         }
 
         Button {
@@ -171,13 +175,36 @@ ColumnLayout {
             flat: false
             onClicked: {
                 console.log(attr);
-                
-                RootDialog.onTampilButton(estimators, parseInt(estimatorIndexTextField.text), attr)
+                const treeIndex = parseInt(estimatorIndexTextField.text);
+                if (!parent.checkInput(treeIndex)) {
+                    errorLabel.text = errorLabel.text + ' Masukkan index pohon 1 - ' + estimators.length;
+                    errorLabel.visible = true;
+                    return;
+                }
+
+                errorLabel.visible = false;
+                RootDialog.onTampilButton(estimators, treeIndex, attr)
                 treeImage.source = ''
                 treeImage.source = applicationPath + "tree.png"
-                
             }
         }
 
+        function checkInput(treeIndex) {
+            if (treeIndex > estimators.length || treeIndex <= 0 || isNaN(treeIndex)) {
+                return false;
+            }
+            return true;
+        }
+    }
+
+    Label {
+        id: errorLabel
+        Layout.leftMargin: 10
+        Layout.rightMargin: 10
+        Layout.bottomMargin: 10
+        visible: false
+        height: 40
+        color: "red"
+        text: 'Input tidak valid.'
     }
 }
