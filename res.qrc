@@ -15,6 +15,9 @@
         <file>qml/UjiDataTunggalLayout.qml</file>
         <file>qml/AttrLabel.qml</file>
         <file>qml/AttrInput.qml</file>
+        <file>qml/RFOneResult.qml</file>
+        <file>qml/TampilPohon.qml</file>
+        <file>qml/Prediksi.qml</file>
     </qresource>
     <qresource prefix="/image">
         <file>images/folder.png</file>

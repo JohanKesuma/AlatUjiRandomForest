@@ -119,7 +119,18 @@ def _hitung_akurasi(confusion_matrix):
 
     return jumlah_benar / jumlah_data
 
-def uji_tunggal(classifier: list, attrValues: list):
+def uji_tunggal(classifier: list, attrValues: list, scaler = None):
+    """
+    Parameter
+    ---------
+    classifier - referensi ke RandomForestClassifier
+    attrValues - data yang akan di prediksi
+    scaler - referensi ke MinMaxNorm
+
+    Return
+    -------
+    HasilPredisiModel
+    """
     predict_list = []
     for c in classifier:
         predict = c.predict(attrValues)
@@ -131,3 +142,65 @@ def uji_tunggal(classifier: list, attrValues: list):
     hasilPrediksiModel = HasilPrediksiModel(predict_list)
 
     return hasilPrediksiModel
+
+def randomForestOne(dataset, attr, kelas, jumlah_pohon=10, n_validation=3):
+    kf = KFold(n_splits=n_validation)
+    data_attr = dataset[attr]
+    data_label = dataset[kelas]
+
+    sum_akurasi = 0
+    rf_list = []
+    for train_index, test_index in kf.split(data_attr):
+        # index training dan testing
+        print("TRAIN:", train_index, "TEST:", test_index)
+
+        # ambil data training
+        x_train, y_train = data_attr.iloc[train_index,:], data_label.iloc[train_index]
+
+                    #ambil data testing 
+        x_test, y_test = data_attr.iloc[test_index,:], data_label.iloc[test_index]
+        rf = RandomForestClassifier(n_estimators=jumlah_pohon, bootstrap=True, random_state=0, criterion='entropy')
+        rf.fit(x_train, y_train)
+        rf_list.append(rf)
+        print('feature', rf.n_features_)
+
+        categories = data_label.astype('category').cat.categories
+
+        # uji data testing dengan model random forest
+        y_predict = rf.predict(x_test)
+
+        print('y_predict', y_predict)
+
+
+        matrix = metrics.confusion_matrix(y_true=y_test, y_pred=y_predict, labels=categories)
+        print(matrix)
+
+        akurasi = _hitung_akurasi(matrix)
+        sum_akurasi += akurasi
+        print(akurasi)
+    # endfor
+    rata_akurasi = float(sum_akurasi / n_validation)
+
+    return {
+        'matrix': matrix,
+        'akurasi': rata_akurasi,
+        'attr': attr,
+        'classifiers': rf_list
+    }
+
+def tampilPohon(rf, treeIndex, attr):
+    """
+    Parameter
+    ---------
+    rf - referensi ke RandomForestCalssifier
+    treeIndex - index tree yang ingin ditampilkan
+    attr - list atribut yang dipakai
+    """
+    print(attr)
+    export_graphviz(rf.estimators_[treeIndex],
+                feature_names=attr,
+                filled=True,
+                out_file='tree.dot',
+                rounded=True)
+    os.system('dot -Tpng tree.dot -o tree.png')
+

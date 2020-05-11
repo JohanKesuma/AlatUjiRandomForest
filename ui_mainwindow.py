@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 390)
+        MainWindow.resize(1200, 680)
         font = QtGui.QFont()
         font.setFamily("Noto Sans")
         MainWindow.setFont(font)
@@ -88,5 +88,5 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("Alat Uji Random Forest", "Alat Uji Random Forest"))
 from PyQt5 import QtQuickWidgets

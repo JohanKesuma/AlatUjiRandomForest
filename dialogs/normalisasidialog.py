@@ -26,7 +26,7 @@ class NormalisasiDialog(QDialog):
 
         # preprocessing.minMaxNorm(min, max, model.dataset.iloc[:,0:5])
         scaler = preprocessing.minMaxNorm(min, max, df)
-        self.parent.scaler = scaler
+        self.parent.scaler = scaler # parent adalah main window
         model.dataset.loc[:,0:5] = df
 
         model.dataChanged.emit(model.index(0, 0), model.index(model.rowCount() - 1, model.columnCount() - 1))

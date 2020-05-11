@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_RFDialog(object):
     def setupUi(self, RFDialog):
         RFDialog.setObjectName("RFDialog")
-        RFDialog.resize(400, 300)
+        RFDialog.resize(1200, 680)
         self.verticalLayout = QtWidgets.QVBoxLayout(RFDialog)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")

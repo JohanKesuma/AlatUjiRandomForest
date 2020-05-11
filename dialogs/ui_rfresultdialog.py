@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_RFResultDialog(object):
     def setupUi(self, RFResultDialog):
         RFResultDialog.setObjectName("RFResultDialog")
-        RFResultDialog.resize(637, 365)
+        RFResultDialog.resize(1200, 680)
         font = QtGui.QFont()
         font.setFamily("Noto Sans")
         RFResultDialog.setFont(font)

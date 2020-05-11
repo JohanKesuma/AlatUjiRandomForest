@@ -45,6 +45,13 @@ Item {
             onClicked: MainWindow.onRandomForestButton()
         }
 
+        Button {
+            id: randomForestButtonOne
+            text: qsTr("Kustom Random Forest")
+            flat: true
+            onClicked: MainWindow.onKustomRandomForestButton()
+        }
+
     }
 }
 

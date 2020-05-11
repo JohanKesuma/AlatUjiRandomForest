@@ -1,45 +1,8 @@
-import QtQuick 2.9
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.5
 
 ColumnLayout {
-    ToolBar {
-        Layout.fillWidth: true
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-        RowLayout {
-            ToolButton {
-                text: qsTr("‹")
-                onClicked: stack.pop()
-            }
-            Label {
-                text: "Detail Klasifikasi"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                elide: Label.ElideRight
-            }
-
-            ToolSeparator {
-                orientation: Qt.Vertical
-                height: parent.height
-                rightPadding: 5
-                leftPadding: 5
-                bottomPadding: 5
-                topPadding: 0
-                anchors.bottom: parent.bottom
-            }
-
-            ToolButton {
-                text: "Uji Data Tunggal"
-                wheelEnabled: true
-                autoExclusive: false
-                display: AbstractButton.TextBesideIcon
-                transformOrigin: Item.Center
-                Layout.fillWidth: false
-                font.capitalization: Font.MixedCase
-                onClicked: stack.push(ujiDataTunggalLayout, {'attrList': attr, 'rfList': rfList})
-            }
-        }
-    }
-
     Rectangle {
         id: root
         visible: true
@@ -56,7 +19,7 @@ ColumnLayout {
             id: photoFrame
             width: parent.width
             height: parent.height
-//            scale: defaultSize / Math.max(image.sourceSize.width, image.sourceSize.height)
+            //            scale: defaultSize / Math.max(image.sourceSize.width, image.sourceSize.height)
             Behavior on scale { NumberAnimation { duration: 200 } }
             Behavior on x { NumberAnimation { duration: 200 } }
             Behavior on y { NumberAnimation { duration: 200 } }
@@ -64,17 +27,16 @@ ColumnLayout {
             border.width: 2
             smooth: true
             antialiasing: true
-//            Component.onCompleted: {
-//                x = Math.random() * root.width - width / 2
-//                y = Math.random() * root.height - height / 2
-//                rotation = Math.random() * 13 - 6
-//            }
+            //            Component.onCompleted: {
+            //                x = Math.random() * root.width - width / 2
+            //                y = Math.random() * root.height - height / 2
+            //                rotation = Math.random() * 13 - 6
+            //            }
             Image {
-                id: treeImage
+                id: treeImg
                 anchors.fill: parent
-                // source: applicationPath + "tree.png"
+                //                source: applicationPath + "tree.png"
                 antialiasing: true
-                cache: false
             }
             PinchArea {
                 anchors.fill: parent
@@ -181,7 +143,7 @@ ColumnLayout {
         }
 
         Label {
-            text: 'Index Pohon :'
+            text: 'Index Pohon : '
         }
 
         TextField {
@@ -190,7 +152,7 @@ ColumnLayout {
             width: 100
             validator: IntValidator{
                 bottom: 1
-                top: estimators.length
+                top: jumlahPohon
             }
         }
 
@@ -198,28 +160,31 @@ ColumnLayout {
             text: 'Tampil'
             flat: false
             onClicked: {
+                console.log(rfList);
                 console.log(attr);
+                
+                
                 const treeIndex = parseInt(estimatorIndexTextField.text);
                 const rfIndex = modelComboBox.currentIndex;
                 if (!parent.checkInput(treeIndex)) {
-                    errorLabel.text = errorLabel.text + ' Masukkan index pohon 1 - ' + estimators.length;
+                    errorLabel.text = errorLabel.text + ' Masukkan index pohon 1 - ' + jumlahPohon;
                     errorLabel.visible = true;
                     return;
                 }
-
                 errorLabel.visible = false;
                 RootDialog.onTampilButton(rfList[rfIndex], treeIndex - 1, attr)
-                treeImage.source = ''
-                treeImage.source = applicationPath + "tree.png"
+                treeImg.source = ''
+                treeImg.source = applicationPath + "tree.png"
             }
         }
 
         function checkInput(treeIndex) {
-            if (treeIndex > estimators.length || treeIndex <= 0 || isNaN(treeIndex)) {
+            if (treeIndex > jumlahPohon || treeIndex <= 0 || isNaN(treeIndex)) {
                 return false;
             }
             return true;
         }
+
     }
 
     Label {

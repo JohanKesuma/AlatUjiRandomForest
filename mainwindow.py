@@ -78,4 +78,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def onRandomForestButton(self):
         runRandomForest(self.tableModel.dataset, self.scaler)
         # dialog = RFDialog(self.tableModel.dataset, self)
+
+    @pyqtSlot()
+    def onKustomRandomForestButton(self):
+        RFDialog(self.tableModel.dataset, self.scaler, self).exec()
         

@@ -60,15 +60,9 @@ class RFResultDIalog(QDialog):
         
         return n_pohon
 
-    @QtCore.pyqtSlot(list, int, list)
-    def onTampilButton(self, estimators, index, attr):
-        print(attr)
-        export_graphviz(estimators[index - 1],
-                    feature_names=attr,
-                    filled=True,
-                    out_file='tree.dot',
-                    rounded=True)
-        os.system('dot -Tpng tree.dot -o tree.png')
+    @QtCore.pyqtSlot('QVariant', int, list)
+    def onTampilButton(self, rf, treeIndex, attr):
+        randomforest.tampilPohon(rf, treeIndex, attr)
 
     @QtCore.pyqtSlot(list, list, list, result=HasilPrediksiModel)
     def onPrediksiButton(self, classifier, attrLabels, attrValues):

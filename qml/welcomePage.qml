@@ -18,13 +18,15 @@ Rectangle {
         anchors.centerIn: parent
         spacing: 20
         Text {
-            text: 'Klasifikasi Status Gizi Balita Menggunakan Metode Random Forest'
+            text: 'Klasifikasi Status Gizi Balita\n Menggunakan Metode Random Forest'
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            font.pointSize: 22
             Layout.fillWidth: true
         }
 
         Button {
             id: openDatasetButton
-            flat: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             text: qsTr("Open Dataset")
             display: AbstractButton.TextOnly
