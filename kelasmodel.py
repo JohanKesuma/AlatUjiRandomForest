@@ -36,3 +36,7 @@ class KelasModel(QAbstractListModel):
             KelasModel.Kelas: b'kelas',
             KelasModel.Attr: b'attr'
         }
+
+    @pyqtSlot(int, str,result='QVariant')
+    def get(self, index, key):
+        return self._model[index][key]

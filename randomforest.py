@@ -22,8 +22,8 @@ def runRandomForest(dataset: pd.DataFrame, scaler = None):
     # label = dataset[['BB/U']] # ambil kolom target
 
     n_folds = [3, 5, 7, 9]
-    # n_pohon = [10, 20, 60, 100, 200, 400, 600]
-    n_pohon = [10]
+    n_pohon = [10, 20, 60, 100, 200, 400, 600]
+    # n_pohon = [10]
 
     models = [] # menyimpan hasil klasifikasi BB/U, PB/U, BB/PB
     tree_index = 0
@@ -143,10 +143,13 @@ def uji_tunggal(classifier: list, attrValues: list, scaler = None):
 
     return hasilPrediksiModel
 
-def randomForestOne(dataset, attr, kelas, jumlah_pohon=10, n_validation=3):
+def randomForestOne(dataset, attr, kelas, jumlah_pohon=10, n_validation=3, bootstrap = True, max_features = 'auto'):
     kf = KFold(n_splits=n_validation)
     data_attr = dataset[attr]
     data_label = dataset[kelas]
+
+    print('max Features = ', max_features)
+    print(data_attr)
 
     sum_akurasi = 0
     rf_list = []
@@ -159,7 +162,7 @@ def randomForestOne(dataset, attr, kelas, jumlah_pohon=10, n_validation=3):
 
                     #ambil data testing 
         x_test, y_test = data_attr.iloc[test_index,:], data_label.iloc[test_index]
-        rf = RandomForestClassifier(n_estimators=jumlah_pohon, bootstrap=True, random_state=0, criterion='entropy')
+        rf = RandomForestClassifier(n_estimators=jumlah_pohon, bootstrap=bootstrap, random_state=0, criterion='entropy', max_features=max_features)
         rf.fit(x_train, y_train)
         rf_list.append(rf)
         print('feature', rf.n_features_)
@@ -196,10 +199,11 @@ def tampilPohon(rf, treeIndex, attr):
     treeIndex - index tree yang ingin ditampilkan
     attr - list atribut yang dipakai
     """
-    print(attr)
+    print(rf.classes_)
     export_graphviz(rf.estimators_[treeIndex],
                 feature_names=attr,
                 filled=True,
+                class_names=rf.classes_,
                 out_file='tree.dot',
                 rounded=True)
     os.system('dot -Tpng tree.dot -o tree.png')

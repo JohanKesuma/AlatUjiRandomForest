@@ -41,9 +41,17 @@ class RFDialog(QDialog):
     def kelasModel(self):
         return KelasModel(self)
 
-    @QtCore.pyqtSlot(int, int, int, result='QVariant')
-    def onProsesButton(self, index, jumlah_pohon, n_validation):
-        return randomForestOne(self.dataset, self._kelas_model._model[index]['attr'], self._kelas_model._model[index]['kelas'], jumlah_pohon, n_validation)
+    @QtCore.pyqtSlot(int, int, int, bool, 'QVariant', result='QVariant')
+    def onProsesButton(self, index, jumlah_pohon, n_validation, bootstrap, max_features):
+        try:
+            # jika max_feature tipenya int
+            _max_feature = int(max_features)
+        except:
+            pass
+        else:
+            max_features = _max_feature
+        
+        return randomForestOne(self.dataset, self._kelas_model._model[index]['attr'], self._kelas_model._model[index]['kelas'], jumlah_pohon, n_validation, bootstrap, max_features)
 
     @QtCore.pyqtSlot(list, list, list, result=HasilPrediksiModel)
     def onPrediksiButton(self, classifier, attrLabels, attrValues):

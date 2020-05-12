@@ -24,13 +24,33 @@ ColumnLayout {
                         columns: 2
                         Component.onCompleted: {
                             console.log('atibut = '  +attrList +', '+ attr.length);
+
+                            let inputField
+                            let inputFieldObject
                             
                             for (let i = 0; i < attrList.length; i++)  {
                                 const label = Qt.createComponent('AttrLabel.qml')
                                 const labelObject = label.createObject(gridLayout, {"labelText": attrList[i]})
-                                const inputField = Qt.createComponent('AttrInput.qml')
-                                const inptFieldObject = inputField.createObject(gridLayout)
-                                attrInput[i] = inptFieldObject
+                                let inputField
+                                let inputFieldObject
+                                if (attrList[i] === 'Js.L/P') {
+                                    inputField = Qt.createComponent('AttrInputComboBox.qml')
+                                    const modelList = [{text: 'Laki-laki', value: 1}, {text: 'Perempuan', value: 2}]
+                                    inputFieldObject = inputField.createObject(gridLayout)
+                                    inputFieldObject.model.append(modelList)
+                                    inputFieldObject.currentIndex = 0
+                                } else if (attrList[i] === 'Posisi diukur'){
+                                    inputField = Qt.createComponent('AttrInputComboBox.qml')
+                                    const modelList = [{text: 'Telentang', value: 3}, {text: 'Berdiri', value: 4}]
+                                    inputFieldObject = inputField.createObject(gridLayout)
+                                    inputFieldObject.model.append(modelList)
+                                    inputFieldObject.currentIndex = 0
+                                } else {
+                                    inputField = Qt.createComponent('AttrInput.qml')
+                                    inputFieldObject = inputField.createObject(gridLayout)
+                                }
+                                inputFieldObject.implicitWidth = 150
+                                attrInput[i] = inputFieldObject
                                 attrLabel[i] = labelObject
                             }
                         }

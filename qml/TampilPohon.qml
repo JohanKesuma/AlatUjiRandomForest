@@ -24,7 +24,7 @@ ColumnLayout {
             Behavior on x { NumberAnimation { duration: 200 } }
             Behavior on y { NumberAnimation { duration: 200 } }
             border.color: "black"
-            border.width: 2
+            border.width: 1
             smooth: true
             antialiasing: true
             //            Component.onCompleted: {
@@ -34,7 +34,10 @@ ColumnLayout {
             //            }
             Image {
                 id: treeImg
-                anchors.fill: parent
+                cache: false
+                anchors.centerIn: parent
+                height: parent.height - 2
+                // anchors.fill: parent
                 //                source: applicationPath + "tree.png"
                 antialiasing: true
             }
@@ -146,13 +149,14 @@ ColumnLayout {
             text: 'Index Pohon : '
         }
 
-        TextField {
-            id: estimatorIndexTextField
-            height: 40
-            width: 100
-            validator: IntValidator{
-                bottom: 1
-                top: jumlahPohon
+        ComboBox {
+            id: indexPohonComboBox
+            Component.onCompleted: {
+                let modelList = []
+                for (let index = 0; index < jumlahPohon; index++) {
+                    modelList[index] = index + 1
+                }
+                indexPohonComboBox.model = modelList
             }
         }
 
@@ -164,37 +168,19 @@ ColumnLayout {
                 console.log(attr);
                 
                 
-                const treeIndex = parseInt(estimatorIndexTextField.text);
+                // const treeIndex = parseInt(estimatorIndexTextField.text);
+                const treeIndex = indexPohonComboBox.currentIndex;
+                console.log('Index Pohon : ' + treeIndex);
+                
                 const rfIndex = modelComboBox.currentIndex;
-                if (!parent.checkInput(treeIndex)) {
-                    errorLabel.text = errorLabel.text + ' Masukkan index pohon 1 - ' + jumlahPohon;
-                    errorLabel.visible = true;
-                    return;
-                }
-                errorLabel.visible = false;
-                RootDialog.onTampilButton(rfList[rfIndex], treeIndex - 1, attr)
+                RootDialog.onTampilButton(rfList[rfIndex], treeIndex, attr)
                 treeImg.source = ''
                 treeImg.source = applicationPath + "tree.png"
+                if (treeImg.width > root.width) {
+                    treeImg.width = root.width
+                }
             }
         }
 
-        function checkInput(treeIndex) {
-            if (treeIndex > jumlahPohon || treeIndex <= 0 || isNaN(treeIndex)) {
-                return false;
-            }
-            return true;
-        }
-
-    }
-
-    Label {
-        id: errorLabel
-        Layout.leftMargin: 10
-        Layout.rightMargin: 10
-        Layout.bottomMargin: 10
-        visible: false
-        height: 40
-        color: "red"
-        text: 'Input tidak valid.'
     }
 }

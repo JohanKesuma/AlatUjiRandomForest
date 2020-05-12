@@ -18,6 +18,7 @@
         <file>qml/RFOneResult.qml</file>
         <file>qml/TampilPohon.qml</file>
         <file>qml/Prediksi.qml</file>
+        <file>qml/AttrInputComboBox.qml</file>
     </qresource>
     <qresource prefix="/image">
         <file>images/folder.png</file>

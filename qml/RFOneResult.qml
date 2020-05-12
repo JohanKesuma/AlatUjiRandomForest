@@ -54,7 +54,7 @@ ColumnLayout {
             }
             TabButton {
                 id: pbuButton
-                text: qsTr("Predisi")
+                text: qsTr("Prediksi")
                 implicitWidth: 100
                 onClicked: resultSwipeView.setCurrentIndex(1)
             }
