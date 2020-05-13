@@ -44,7 +44,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
     @pyqtSlot()
     def openDataset(self):
-        file_name = QtWidgets.QFileDialog.getOpenFileName(self, 'Open Dataset', QDir.homePath(), "Excel files (*.xls *.xlsx)")
+        file_name = QtWidgets.QFileDialog.getOpenFileName(self, 'Open Dataset', QDir.homePath(), "CSV and Excel(*.xls *.xlsx *.csv);;Excel files (*.xls *.xlsx);;CSV Files(*.csv)")
         
         # jika cancel
         if file_name[0] == '' or file_name == None: 

@@ -1,5 +1,6 @@
 from PyQt5 import QtCore
 import pandas as pd
+import os
 
 class TableModel(QtCore.QAbstractTableModel):
 
@@ -40,9 +41,16 @@ class TableModel(QtCore.QAbstractTableModel):
 
         """
 
+        file_extension = os.path.splitext(url)[1]
+
+        print(file_extension)
+
         if url != '':
             table_model = TableModel(parent)
-            table_model.dataset = pd.read_excel(url)
+            if file_extension == '.csv':
+                table_model.dataset = pd.read_csv(url)
+            else:
+                table_model.dataset = pd.read_excel(url)
             return table_model
         else:
             return None
