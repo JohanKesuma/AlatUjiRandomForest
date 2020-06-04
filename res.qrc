@@ -3,10 +3,8 @@
         <file>qtquickcontrols2.conf</file>
         <file>qml/MenuPage.qml</file>
         <file>qml/NormalisasiDialog.qml</file>
-        <file>qml/RecentFileList.qml</file>
         <file>qml/welcomePage.qml</file>
         <file>qml/mainWindow.qml</file>
-        <file>qml/ColumnList.qml</file>
         <file>images/trash.png</file>
         <file>qml/rfDialog.qml</file>
         <file>qml/rfResultDialog.qml</file>
@@ -19,6 +17,8 @@
         <file>qml/TampilPohon.qml</file>
         <file>qml/Prediksi.qml</file>
         <file>qml/AttrInputComboBox.qml</file>
+        <file>qml/TrainingTestingRandomForest.qml</file>
+        <file>qml/CrossValidationRandomForest.qml</file>
     </qresource>
     <qresource prefix="/image">
         <file>images/folder.png</file>

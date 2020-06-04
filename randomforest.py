@@ -167,7 +167,8 @@ def randomForestOne(dataset, attr, kelas, jumlah_pohon=10, n_validation=3, boots
         rf_list.append(rf)
         print('feature', rf.n_features_)
 
-        categories = data_label.astype('category').cat.categories
+        # categories = data_label.astype('category').cat.categories
+        categories = rf.classes_
 
         # uji data testing dengan model random forest
         y_predict = rf.predict(x_test)
@@ -190,6 +191,35 @@ def randomForestOne(dataset, attr, kelas, jumlah_pohon=10, n_validation=3, boots
         'attr': attr,
         'classifiers': rf_list
     }
+
+def randomForestCustomTesting(data_training, data_testing, attr, kelas, jumlah_pohon=10, bootstrap = True, max_features = 'auto'):
+    data_attr = data_training[attr]
+    data_label = data_training[kelas]
+    print(data_testing)
+
+    x_test, y_test = data_testing[attr], data_testing[kelas]
+
+    rf = RandomForestClassifier(n_estimators=jumlah_pohon, bootstrap=bootstrap, random_state=0, criterion='entropy', max_features=max_features)
+    rf.fit(data_attr, data_label)
+    rf_list = [rf]
+
+    y_predict = rf.predict(x_test)
+
+    categories = rf.classes_
+
+    matrix = metrics.confusion_matrix(y_true=y_test, y_pred=y_predict, labels=categories)
+    print(matrix)
+
+    akurasi = float(_hitung_akurasi(matrix))
+    print(akurasi)
+
+    return {
+        'matrix': matrix,
+        'akurasi': akurasi,
+        'attr': attr,
+        'classifiers': rf_list
+    }
+
 
 def tampilPohon(rf, treeIndex, attr):
     """

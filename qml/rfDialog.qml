@@ -28,196 +28,66 @@ Item {
 
     Component {
         id: main
-        Rectangle {
-            anchors.fill: parent
-            ColumnLayout {
-                anchors.centerIn: parent
-                GridLayout {
 
-                    columnSpacing: 30
-                    columns: 2
-                    Label {
-                        id: crossValidationLabel
-                        text: qsTr("Cross Validation")
-                    }
+        RowLayout {
+            Rectangle {
+                id: menu
+                width: 200
+                Layout.fillHeight: true
+                ListView {
+                    property var cItem: currentItem
+                    anchors.fill: parent
+                    id: menuListView
+                    currentIndex: 0
 
-                    TextField {
-                        id: crossValidationTextField
-                        validator: IntValidator{
-                            bottom: 2
-                            top: 99
+                    model: ListModel {
+                        ListElement {
+                            title: "Cross Validation"
+                            source: "CrossValidationRandomForest.qml"
+                        }
+                        ListElement {
+                            title: "Pilih Data Testing"
+                            source: "TrainingTestingRandomForest.qml"
                         }
                     }
 
-                    Label {
-                        id: jumlahPohonLabel
-                        text: qsTr("Jumlah Pohon")
-                    }
-
-                    TextField {
-                        id: jumlahPohonTextField
-                        validator: IntValidator{
-                            bottom: 1
-                            top: 100000
-                        }
-                    }
-
-                    Label {
-                        text: 'Bootstrap'
-                    }
-
-                    CheckBox {
-                        id: bootstrapCheckBox
-                        checked: true
-                    }
-
-                    Label {
-                        text: qsTr('Max Features')
-                    }
-
-                    ComboBox {
-                        id: maxFeaturesComboBox
-                        textRole: 'text'
-                        model: ListModel {
-                            ListElement {
-                                text: 'sqrt'
-                                value: 'sqrt'
-                            }
-                            ListElement {
-                                text: 'log2'
-                                value: 'log2'
-                            }
-                            ListElement {
-                                text: 'Semua'
-                                value: null
-                            }
-                            ListElement {
-                                text: 'Input'
-                                value: 0
-                            }
-                        }
-                        onCurrentIndexChanged: {
-                            let currentElemen = maxFeaturesComboBox.model.get(currentIndex)
-                            console.log(currentElemen.value)
-                            if (currentElemen.value === '0' ) {
-                                nFeatuersLabel.visible = true
-                                nFeaturesComboBox.visible = true
-                            } else {
-                                nFeatuersLabel.visible = false
-                                nFeaturesComboBox.visible = false
-                            }
+                    delegate: ItemDelegate {
+                        width: parent.width
+                        text: model.title
+                        highlighted: {
+                            if (menuListView.currentIndex === index)
+                                return true
+                            else
+                                return false
                         }
 
-                    }
-
-                    Label {
-                        id: nFeatuersLabel
-                        text: qsTr('N Features')
-                        visible: false
-                    }
-
-                    ComboBox {
-                        id: nFeaturesComboBox
-                        textRole: 'text'
-                        visible: false
-                        model: ListModel {
-
-                        }
-                    }
-
-                    Label {
-                        text: 'Kelas'
-                    }
-
-                    ComboBox {
-                        id: kelasComboBox
-                        textRole: 'kelas'
-                        model: RootDialog.kelasModel
-                        onCurrentIndexChanged: {
-                            const nFeaturesComboBoxIndex = nFeaturesComboBox.currentIndex;
-                            let idx = 0;
-
-                            console.log('kelas current index ' + kelasComboBox.currentIndex);
-                            console.log('model ' + kelasComboBox.model.get(kelasComboBox.currentIndex, 'attr'));
-
-                            const attrLength = kelasComboBox.model.get(kelasComboBox.currentIndex, 'attr').length;
-
-                            nFeaturesComboBox.model.clear()
-
-                            for (let i=1; i<=attrLength;i++) {
-                                nFeaturesComboBox.model.append({text: i, value: i})
-                            }
-
-                            if (nFeaturesComboBoxIndex > attrLength - 1) {
-                                nFeaturesComboBox.currentIndex = attrLength - 1;
-                            } else if(nFeaturesComboBoxIndex < 0) {
-                                nFeaturesComboBox.currentIndex = 0;
-                            } else {
-                                nFeaturesComboBox.currentIndex = nFeaturesComboBoxIndex;
+                        onClicked: {
+                            if (menuListView.currentIndex != index) {
+                                menuListView.currentIndex = index
+                                rfStack.replace(model.source)
                             }
                         }
                     }
-                }
 
-                Button {
-                    text: 'Proses'
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    onClicked: {
-                        const jumlah_pohon = parseInt(jumlahPohonTextField.text);
-                        const n_validation = parseInt(crossValidationTextField.text);
-                        errorLabel.text = '';
-                        if (isNaN(jumlah_pohon) || isNaN(n_validation)) {
-                            errorLabel.text = 'Input harus berupa angka dan tidak boleh kosong'
-                            errorLabel.visible = true;
-                            return;
-                        }
-
-                        if (n_validation < 2) {
-                            errorLabel.text = errorLabel.text + '\nCross Validation harus >= 2'
-                            errorLabel.visible = true;
-                            return;
-                        }
-                        let maxFeatures = maxFeaturesComboBox.model.get(maxFeaturesComboBox.currentIndex).value
-                        if (maxFeatures === '0') {
-                            maxFeatures = parseInt(nFeaturesComboBox.model.get(nFeaturesComboBox.currentIndex).value)
-                            if (isNaN(maxFeatures)) {
-                                errorLabel.visible = true;
-                                return;
-                            }
-                        }
-
-                        errorLabel.visible = false;
-                        
-                        console.log('max feature : ' + maxFeatures);
-                        
-                        const data = RootDialog.onProsesButton(kelasComboBox.currentIndex, jumlah_pohon, n_validation, bootstrapCheckBox.checked, maxFeatures);
-                        let akurasi
-                        let attr
-                        let rfList
-                        for(let key in data){
-                            if (key === 'akurasi') {
-                                akurasi = data[key]
-                            } else if(key === 'attr') {
-                                attr = data[key]
-                                console.log('attr ' + data[key].length);
-                                
-                            } else if (key === 'classifiers') {
-                                rfList = data[key]
-                            }
-                        }
-                        
-                        stack.push(result, {akurasi: akurasi, attr: attr, rfList: rfList, jumlahPohon: jumlah_pohon})
-                    }
-                }
-
-                Label {
-                    id: errorLabel
-                    visible: false
-                    color: "#ff0000"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    ScrollIndicator.vertical: ScrollIndicator {}
                 }
             }
+
+            ToolSeparator {
+                orientation: "Vertical"
+                Layout.fillHeight: true
+                leftPadding: 0
+                rightPadding: 0
+            }
+
+            StackView {
+                id: rfStack
+                initialItem: "CrossValidationRandomForest.qml"
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+            }
         }
+        
     }
 }
 
