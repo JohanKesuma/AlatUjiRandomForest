@@ -187,7 +187,7 @@ Rectangle {
                             }
                         }
                         
-                        stack.push(result, {akurasi: akurasi, attr: attr, rfList: rfList, jumlahPohon: jumlah_pohon})
+                        stack.push(result, {akurasi: akurasi, attr: attr, rfList: rfList, jumlahPohon: jumlah_pohon, kelas: kelasComboBox.model.get(kelasComboBox.currentIndex, 'kelas')})
                     }
                 }
 

@@ -220,6 +220,39 @@ def randomForestCustomTesting(data_training, data_testing, attr, kelas, jumlah_p
         'classifiers': rf_list
     }
 
+def uji_data_banyak(classifiers: list, data_testing, attr: list, kelas):
+    """
+    Parameter
+    ---------
+    classifier - referensi ke RandomForestClassifier
+    data_testing - data yang akan di prediksi
+    attr - atribut yang digunakan untuk klasifikasi
+    scaler - referensi ke MinMaxNorm
+
+    Return
+    -------
+    HasilPredisiModel
+    """
+    print(data_testing)
+    x_test, y_test = data_testing[attr], data_testing[kelas]
+    sum_akurasi = 0
+    for classifier in classifiers:
+        y_predict = classifier.predict(x_test)
+        
+        categories = classifier.classes_
+
+        matrix = metrics.confusion_matrix(y_true=y_test, y_pred=y_predict, labels=categories)
+        print(matrix)
+
+        matrix = metrics.confusion_matrix(y_true=y_test, y_pred=y_predict, labels=categories)
+        akurasi = float(_hitung_akurasi(matrix))
+        sum_akurasi += akurasi
+    # endfor
+
+    rata_akurasi = float(sum_akurasi / len(classifiers))
+    return rata_akurasi
+        
+
 
 def tampilPohon(rf, treeIndex, attr):
     """

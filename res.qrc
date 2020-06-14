@@ -19,6 +19,7 @@
         <file>qml/AttrInputComboBox.qml</file>
         <file>qml/TrainingTestingRandomForest.qml</file>
         <file>qml/CrossValidationRandomForest.qml</file>
+        <file>qml/UjiDataBanyak.qml</file>
     </qresource>
     <qresource prefix="/image">
         <file>images/folder.png</file>

@@ -6,7 +6,7 @@ from dialogs.ui_rfdialog import Ui_RFDialog
 from randomforest import runRandomForest
 
 from kelasmodel import KelasModel
-from randomforest import randomForestOne, randomForestCustomTesting, tampilPohon, uji_tunggal
+from randomforest import randomForestOne, randomForestCustomTesting, tampilPohon, uji_tunggal, uji_data_banyak
 from resultmodel import HasilPrediksiModel
 
 import pathlib
@@ -28,7 +28,7 @@ class RFDialog(QDialog):
         self._scaler = scaler
 
         self.ui.quickWidget.rootContext().setContextProperty('RootDialog', self)
-        self.ui.quickWidget.rootContext().setContextProperty('applicationPath', 'file://'+str(pathlib.Path().absolute())+'/')
+        self.ui.quickWidget.rootContext().setContextProperty('applicationPath', 'file:/'+str(QtCore.QDir.currentPath())+'/')
         self._kelas_model = KelasModel(self)
 
     @QtCore.pyqtSlot('QVariant', int, list)
@@ -113,4 +113,14 @@ class RFDialog(QDialog):
             return
         
         return [dataset, path_leaf(file_name)]
+
+    @QtCore.pyqtSlot(list, 'QVariant', list, str, result=float)
+    def ujiDataBanyak(self, classifiers, data_testing, attr, kelas):
+        df = data_testing.copy()
+
+        if self._scaler != None:
+            scaled_data = self._scaler.transform(df.iloc[:,0:5])
+            df.iloc[:,0:5] = scaled_data
+
+        return uji_data_banyak(classifiers, df, attr, kelas)
 

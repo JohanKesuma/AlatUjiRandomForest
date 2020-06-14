@@ -7,6 +7,7 @@ ColumnLayout {
     property variant attr
     property variant rfList
     property variant jumlahPohon
+    property variant kelas
     ToolBar {
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
@@ -53,10 +54,15 @@ ColumnLayout {
                 onClicked: resultSwipeView.setCurrentIndex(0)
             }
             TabButton {
-                id: pbuButton
-                text: qsTr("Prediksi")
+                text: qsTr('Uji Data Banyak')
                 implicitWidth: 100
                 onClicked: resultSwipeView.setCurrentIndex(1)
+            }
+            TabButton {
+                id: pbuButton
+                text: qsTr("Uji Data Tunggal")
+                implicitWidth: 100
+                onClicked: resultSwipeView.setCurrentIndex(2)
             }
         }
 
@@ -70,6 +76,11 @@ ColumnLayout {
         onCurrentIndexChanged: tabBar.setCurrentIndex(currentIndex)
         Page {
             TampilPohon{
+                anchors.fill: parent
+            }
+        }
+        Page {
+            UjiDataBanyak {
                 anchors.fill: parent
             }
         }
