@@ -38,16 +38,16 @@ Item {
 
         }
 
-        Button {
-            id: randomForestButton
-            text: qsTr("Random Forest")
-            flat: true
-            onClicked: MainWindow.onRandomForestButton()
-        }
+        // Button {
+        //     id: randomForestButton
+        //     text: qsTr("Random Forest")
+        //     flat: true
+        //     onClicked: MainWindow.onRandomForestButton()
+        // }
 
         Button {
             id: randomForestButtonOne
-            text: qsTr("Kustom Random Forest")
+            text: qsTr("Random Forest")
             flat: true
             onClicked: MainWindow.onKustomRandomForestButton()
         }

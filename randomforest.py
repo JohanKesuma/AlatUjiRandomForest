@@ -160,7 +160,7 @@ def randomForestOne(dataset, attr, kelas, jumlah_pohon=10, n_validation=3, boots
         # ambil data training
         x_train, y_train = data_attr.iloc[train_index,:], data_label.iloc[train_index]
 
-                    #ambil data testing 
+        #ambil data testing 
         x_test, y_test = data_attr.iloc[test_index,:], data_label.iloc[test_index]
         rf = RandomForestClassifier(n_estimators=jumlah_pohon, bootstrap=bootstrap, random_state=0, criterion='entropy', max_features=max_features)
         rf.fit(x_train, y_train)

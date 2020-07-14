@@ -58,7 +58,7 @@ ColumnLayout {
                     }
 
                     Button {
-                        text: 'Prediksi'
+                        text: 'Proses'
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         onClicked: {
                             let attrValues = []
