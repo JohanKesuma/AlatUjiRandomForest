@@ -65,7 +65,7 @@ ColumnLayout {
                             let attrLabels = []
                             for (let i = 0; i < attrList.length; i++)  {
                                 attrValues[i] = parseFloat(attrInput[i].text)
-                                if (isNaN(attrValues[i])) {
+                                if (isNaN(attrValues[i]) || attrValues[i] < 0) {
                                     errorLabel.visible = true
                                     return;
                                 }
@@ -87,7 +87,7 @@ ColumnLayout {
                         visible: false
                         color: "#ff0000"
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        text: 'Input harus berupa angka dan tidak boleh kosong'
+                        text: 'Input harus berupa angka positif dan tidak boleh kosong'
                     }
                 }
                 

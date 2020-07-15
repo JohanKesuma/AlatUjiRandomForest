@@ -14,7 +14,7 @@ import os
 
 def runRandomForest(dataset: pd.DataFrame, scaler = None):
 
-    labels = ['BB/U', 'PB/U', 'BB/PB']
+    labels = ['BB/U', 'TB/U', 'BB/TB']
     attrs = [['Js.L/P', 'Berat B.', 'Umur'], ['Js.L/P', 'Berat B.', 'PB / TB', 'Posisi diukur', 'Umur'], ['Js.L/P', 'Berat B.', 'PB / TB', 'Posisi diukur', 'Umur']]
 
     # pemisahan atribut dan target

@@ -12,11 +12,11 @@ class KelasModel(QAbstractListModel):
                 'attr': ['Js.L/P', 'Berat B.', 'Umur']
             },
             {
-                'kelas': 'PB/U',
+                'kelas': 'TB/U',
                 'attr': ['Js.L/P', 'Berat B.', 'PB / TB', 'Posisi diukur', 'Umur']
             },
             {
-                'kelas': 'BB/PB',
+                'kelas': 'BB/TB',
                 'attr': ['Js.L/P', 'Berat B.', 'PB / TB', 'Posisi diukur', 'Umur']
             }
         ]
