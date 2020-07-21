@@ -20,6 +20,7 @@
         <file>qml/TrainingTestingRandomForest.qml</file>
         <file>qml/CrossValidationRandomForest.qml</file>
         <file>qml/UjiDataBanyak.qml</file>
+        <file>qml/OptimalModel.qml</file>
     </qresource>
     <qresource prefix="/image">
         <file>images/folder.png</file>

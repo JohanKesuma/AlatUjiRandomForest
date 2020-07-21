@@ -6,7 +6,7 @@ from dialogs.ui_rfdialog import Ui_RFDialog
 from randomforest import runRandomForest
 
 from kelasmodel import KelasModel
-from randomforest import randomForestOne, randomForestCustomTesting, tampilPohon, uji_tunggal, uji_data_banyak
+from randomforest import randomForestOne, randomForestCustomTesting, tampilPohon, uji_tunggal, uji_data_banyak, load_optimal_model as lom, save_optimal_model
 from resultmodel import HasilPrediksiModel
 
 import pathlib
@@ -71,8 +71,13 @@ class RFDialog(QDialog):
             scaled_data = self._scaler.transform(df.iloc[:,0:5])
             df.iloc[:,0:5] = scaled_data
 
-
-        return randomForestCustomTesting(self.dataset, df, self._kelas_model._model[index]['attr'], self._kelas_model._model[index]['kelas'], jumlah_pohon, bootstrap, max_features)
+        rf_result = randomForestCustomTesting(self.dataset, df, self._kelas_model._model[index]['attr'], self._kelas_model._model[index]['kelas'], jumlah_pohon, bootstrap, max_features)
+        rf_result['scaler'] = self._scaler
+        rf_result['jumlah_pohon'] = rf_result['classifiers'][0].n_estimators
+        rf_result['max_features'] = rf_result['classifiers'][0].max_features
+        rf_result['bootstrap'] = rf_result['classifiers'][0].bootstrap
+        save_optimal_model(rf_result, self._kelas_model._model[index]['kelas'])
+        return rf_result
 
     @QtCore.pyqtSlot(list, list, list, result=HasilPrediksiModel)
     def onPrediksiButton(self, classifier, attrLabels, attrValues):
@@ -123,4 +128,11 @@ class RFDialog(QDialog):
             df.iloc[:,0:5] = scaled_data
 
         return uji_data_banyak(classifiers, df, attr, kelas)
+
+    @QtCore.pyqtSlot(str, result='QVariant')
+    def loadOptimalModel(self, kelas):
+        loaded = lom(kelas)
+        print(loaded)
+        self._scaler = loaded['scaler']
+        return loaded
 

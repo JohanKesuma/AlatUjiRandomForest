@@ -49,6 +49,10 @@ Item {
                             title: "Pilih Data Testing"
                             source: "TrainingTestingRandomForest.qml"
                         }
+                        ListElement {
+                            title: "Optimal Model"
+                            source: "OptimalModel.qml"
+                        }
                     }
 
                     delegate: ItemDelegate {

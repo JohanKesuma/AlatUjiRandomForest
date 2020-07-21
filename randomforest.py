@@ -11,6 +11,7 @@ from resultmodel import ResultModel, HasilPrediksiModel
 import pandas as pd
 
 import os
+import joblib
 
 def runRandomForest(dataset: pd.DataFrame, scaler = None):
 
@@ -213,12 +214,49 @@ def randomForestCustomTesting(data_training, data_testing, attr, kelas, jumlah_p
     akurasi = float(_hitung_akurasi(matrix))
     print(akurasi)
 
+    result = {
+        'matrix': matrix,
+        'akurasi': akurasi,
+        'attr': attr,
+        'classifiers': rf_list,
+    }
+
+    # save_file_name = 'optimal_model.sav'
+    # joblib.dump(result, save_file_name)
+
+    # loaded_rf = joblib.load(save_file_name)
+    # print(loaded_rf)
+
     return {
         'matrix': matrix,
         'akurasi': akurasi,
         'attr': attr,
         'classifiers': rf_list
     }
+
+def save_optimal_model(data, kelas):
+    if kelas == 'BB/U':
+        joblib.dump(data, 'optimal_model_bbu.sav')
+        return True
+    elif kelas == 'TB/U':
+        joblib.dump(data, 'optimal_model_tbu.sav')
+        return True
+    elif kelas == 'BB/TB':
+        joblib.dump(data, 'optimal_model_bbtb.sav')
+        return True
+
+    return None
+
+
+def load_optimal_model(kelas):
+    if kelas == 'BB/U':
+        return joblib.load('optimal_model_bbu.sav')
+    elif kelas == 'TB/U':
+        return joblib.load('optimal_model_tbu.sav')
+    elif kelas == 'BB/TB':
+        return joblib.load('optimal_model_bbtb.sav')
+    
+    return None
 
 def uji_data_banyak(classifiers: list, data_testing, attr: list, kelas):
     """
